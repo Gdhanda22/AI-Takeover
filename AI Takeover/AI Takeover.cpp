@@ -20,14 +20,14 @@ int main()
 {
 	// The Player
 	Sprite player;
-	Texture playerskin; // lihjiuh
+	Texture playerskin;
 	Texture playershoot;
 	playershoot.loadFromFile("shot.png");
 	playerskin.loadFromFile("player.png");
 	player.setTexture(playerskin);
- 	player.setOrigin(50, 50);
- 	player.setPosition(346.5, 835);
- 	player.setScale(1.6, 1.6);
+	player.setOrigin(50, 50);
+	player.setPosition(346.5, 835);
+	player.setScale(1.75, 1.75);
 
 	// The Background
 	Sprite background;
@@ -52,7 +52,14 @@ int main()
 	name.setTexture(aitakeover);
 	name.setPosition(346.5, 200);
 	name.setOrigin(45.5, 7);
-	name.setScale(5.5, 5.5);
+	name.setScale(6, 6);
+	Sprite start;
+	Texture startbutton;
+	startbutton.loadFromFile("start.png");
+	start.setTexture(startbutton);
+	start.setPosition(346.5, 450);
+	start.setScale(6.5, 6.5);
+	start.setOrigin(50, 50);
 
 	// Movement
 	bool PlayerLeft = false;
@@ -64,55 +71,68 @@ int main()
 	while (window.isOpen()) {
 		Event event;
 		while (window.pollEvent(event)) {
-			if (event.type == Event::Closed) {
-				window.close();
+			if (Playing == false) {
+				if (event.type == Event::MouseButtonPressed) {
+					if (start.getGlobalBounds().contains((Vector2f)Mouse::getPosition(window))) {
+						Playing = true;
+					}
+				}
+				window.clear();
+				window.draw(background);
+				window.draw(player);
+				window.draw(name);
+				window.draw(start);
+				window.display();
+				if (event.type == Event::Closed) {
+					window.close();
+				}
 			}
-			while (Playing) {
+			if (Playing == true) {
 				if (event.type == Event::KeyPressed) {
 					if (event.key.code == Keyboard::D) {
-					PlayerRight = true;
-				}
+						PlayerRight = true;
+					}
 					if (event.key.code == Keyboard::A) {
-					PlayerLeft = true;
-				}
+						PlayerLeft = true;
+					}
 					if (event.key.code == Keyboard::Space) {
-					Shooting = true;
-				}
+						Shooting = true;
+					}
 				}
 				if (event.type == Event::KeyReleased) {
 					if (event.key.code == Keyboard::D) {
-					PlayerRight = false;
-				}
+						PlayerRight = false;
+					}
 					if (event.key.code == Keyboard::A) {
-					PlayerLeft = false;
-				}
+						PlayerLeft = false;
+					}
 					if (event.key.code == Keyboard::Space) {
-					Shooting = false;
+						Shooting = false;
+					}
+				}
+				if (event.type == Event::Closed) {
+					window.close();
+				}
+				if (PlayerRight and player.getPosition().x < 593) {
+					player.setPosition((player.getPosition().x + 3.75), (player.getPosition().y));
+				}
+				if (PlayerLeft and player.getPosition().x > 100) {
+					player.setPosition((player.getPosition().x - 3.75), (player.getPosition().y));
+				}
+				if (Shooting) {
+					player.setTexture(playershoot);
+				}
+				else {
+					player.setTexture(playerskin);
+				}
+				window.clear();
+				window.draw(background);
+				window.draw(player);
+				window.display();
 				}
 			}
-		}
-		
-		if (PlayerRight and player.getPosition().x < 593) {
-			player.setPosition((player.getPosition().x + .2), (player.getPosition().y));
-		}
-		if (PlayerLeft and player.getPosition().x > 100) {
-			player.setPosition((player.getPosition().x - .2), (player.getPosition().y));
-		}
-		if (Shooting) {
-			player.setTexture(playershoot);
-		}
-		else {
-			player.setTexture(playerskin);
-		}
-
-		window.clear();
-		window.draw(background);
-		window.draw(player);
-		window.draw(name);
-		window.display();
+		}	
 	}
-
-}
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
 // Debug program: F5 or Debug > Start Debugging menu
