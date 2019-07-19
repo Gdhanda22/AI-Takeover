@@ -1,12 +1,22 @@
 #include "pch.h"
 #include "Pounder.h"
+#include "Ranger.h"
+#include "RangerBullet.h"
+#include "PlayerBullet.h"
+#include <iostream>
+#include <string>
+#include <random>
+#include <fstream>
+#include <vector>
+#include <SFML/Graphics.hpp>
+#include <Windows.h>
+using namespace std;
 
 
-Pounder::Pounder()
-{
+Pounder::Pounder() {
+Public:
+	pounderskin.loadFromFile("pounder.png");
+	pounder.setTexture(pounderskin);
+	pounder.setPosition(200, 200);
 }
 
-
-Pounder::~Pounder()
-{
-}

@@ -4,9 +4,6 @@
 
 PlayerBullet::PlayerBullet()
 {
+
 }
 
-
-PlayerBullet::~PlayerBullet()
-{
-}

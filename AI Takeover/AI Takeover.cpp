@@ -20,12 +20,14 @@ int main()
 {
 	// The Player
 	Sprite player;
-	Texture playerskin;
+	Texture playerskin; // lihjiuh
+	Texture playershoot;
+	playershoot.loadFromFile("shot.png");
 	playerskin.loadFromFile("player.png");
 	player.setTexture(playerskin);
  	player.setOrigin(50, 50);
  	player.setPosition(346.5, 835);
- 	player.setScale(1.5, 1.5);
+ 	player.setScale(1.6, 1.6);
 
 	// The Background
 	Sprite background;
@@ -35,8 +37,28 @@ int main()
 	background.setOrigin(11, 0);
 	background.setScale(9, 9);
 
+	//Pounder Stuff
+	sf::Sprite pounder;
+	sf::Texture pounderskin;
+	pounderskin.loadFromFile("pounder.png");
+	pounder.setTexture(pounderskin);
+	pounder.setPosition(200, 200);
+	pounder.setScale(1.75, 1.75);
+
+	// Start Screen Stuff
+	Sprite name;
+	Texture aitakeover;
+	aitakeover.loadFromFile("name.png");
+	name.setTexture(aitakeover);
+	name.setPosition(346.5, 200);
+	name.setOrigin(45.5, 7);
+	name.setScale(5.5, 5.5);
+
+	// Movement
 	bool PlayerLeft = false;
 	bool PlayerRight = false;
+	bool Shooting = false;
+	bool Playing = false;
 
 	RenderWindow window(VideoMode(693, 900), "Game Window");
 	while (window.isOpen()) {
@@ -45,35 +67,48 @@ int main()
 			if (event.type == Event::Closed) {
 				window.close();
 			}
-			if (event.type == Event::KeyPressed) {
-				if (event.key.code == Keyboard::D) {
+			while (Playing) {
+				if (event.type == Event::KeyPressed) {
+					if (event.key.code == Keyboard::D) {
 					PlayerRight = true;
 				}
-				if (event.key.code == Keyboard::A) {
+					if (event.key.code == Keyboard::A) {
 					PlayerLeft = true;
 				}
-			}
-			if (event.type == Event::KeyReleased) {
-				if (event.key.code == Keyboard::D) {
+					if (event.key.code == Keyboard::Space) {
+					Shooting = true;
+				}
+				}
+				if (event.type == Event::KeyReleased) {
+					if (event.key.code == Keyboard::D) {
 					PlayerRight = false;
 				}
-				if (event.key.code == Keyboard::A) {
+					if (event.key.code == Keyboard::A) {
 					PlayerLeft = false;
+				}
+					if (event.key.code == Keyboard::Space) {
+					Shooting = false;
 				}
 			}
 		}
 		
-		if (PlayerRight) {
-			player.setPosition((player.getPosition().x + .1), (player.getPosition().y));
+		if (PlayerRight and player.getPosition().x < 593) {
+			player.setPosition((player.getPosition().x + .2), (player.getPosition().y));
 		}
-		if (PlayerLeft) {
-			player.setPosition((player.getPosition().x - .1), (player.getPosition().y));
+		if (PlayerLeft and player.getPosition().x > 100) {
+			player.setPosition((player.getPosition().x - .2), (player.getPosition().y));
 		}
-
+		if (Shooting) {
+			player.setTexture(playershoot);
+		}
+		else {
+			player.setTexture(playerskin);
+		}
 
 		window.clear();
 		window.draw(background);
 		window.draw(player);
+		window.draw(name);
 		window.display();
 	}
 

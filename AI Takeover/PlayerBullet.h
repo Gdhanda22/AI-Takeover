@@ -3,6 +3,7 @@ class PlayerBullet
 {
 public:
 	PlayerBullet();
-	~PlayerBullet();
+	// Texture bulletskin;
+	// Sprite bullet;
 };
 
