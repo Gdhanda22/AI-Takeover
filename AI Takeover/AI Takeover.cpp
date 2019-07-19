@@ -64,13 +64,16 @@ int main()
 	start.setOrigin(50, 50);
 
 	// Shooting Stuff
-	clock_t time;
+	vector<PlayerBullet> BulletVector;
+	
+	Clock clock;
 
 	// Movement
 	bool PlayerLeft = false;
 	bool PlayerRight = false;
 	bool Shooting = false;
 	bool Playing = false;
+	bool ShotSkin = false;
 
 	RenderWindow window(VideoMode(693, 900), "Game Window");
 	while (window.isOpen()) {
@@ -83,20 +86,10 @@ int main()
 						player.setPosition(346.5, 835);
 					}
 				}
-				window.clear();
-				window.draw(background);
-				window.draw(name);
-				window.draw(start);
-				window.display();
+				
 				if (event.type == Event::Closed) {
 					window.close();
 				}
-			}
-			if (Playing) {
-				window.clear();
-				window.draw(background);
-				window.draw(player);
-				window.display();
 			}
 
 			if (event.type == Event::KeyPressed) {
@@ -108,6 +101,8 @@ int main()
 				}
 				if (event.key.code == Keyboard::Space) {
 					Shooting = true;
+
+					
 				}
 			}
 			if (event.type == Event::KeyReleased) {
@@ -119,34 +114,72 @@ int main()
 				}
 				if (event.key.code == Keyboard::Space) {
 					Shooting = false;
+					player.setTexture(playerskin);
 				}
 			}
 			if (event.type == Event::Closed) {
 				window.close();
 			}
-			if (PlayerRight and player.getPosition().x < 593) {
-				player.setPosition((player.getPosition().x + 4), (player.getPosition().y));
+			
+		// PlayerBullet abullet(Vector2f((player.getPosition().x + 5), (player.getPosition().y - 10)));
+		// BulletVector.push_back(abullet);
+
+		}
+
+		if (Playing) {
+
+			window.clear();
+			window.draw(background);
+			window.draw(player);
+			window.display();
+		}
+		else {
+			window.clear();
+			window.draw(background);
+			window.draw(name);
+			window.draw(start);
+			window.display();
+		}
+
+
+		if (PlayerRight and player.getPosition().x < 593) {
+			player.setPosition((player.getPosition().x + .2), (player.getPosition().y));
+		}
+		if (PlayerLeft and player.getPosition().x > 100) {
+			player.setPosition((player.getPosition().x - .2), (player.getPosition().y));
+		}
+		if (Shooting) {
+			player.setTexture(playershoot);
+			if ((clock.getElapsedTime().asSeconds() >= .089 and ShotSkin == true)) {
+				ShotSkin = false;
+				clock.restart();
 			}
-			if (PlayerLeft and player.getPosition().x > 100) {
-				player.setPosition((player.getPosition().x - 4), (player.getPosition().y));
-			}
-			vector<PlayerBullet> BulletVector;
-			if (Shooting) {
-				PlayerBullet abullet();
-				BulletVector.push_back(abullet);
-			}
-			else {
-				player.setTexture(playerskin);
+			else if ((clock.getElapsedTime().asSeconds() >= .089 and ShotSkin == false)) {
+				ShotSkin = true;
+				clock.restart();
 			}
 		}
-		for (int i = 0; i < BulletVector.size(); i++)
+		else if (!Shooting) {
+			player.setTexture(playerskin);
+			ShotSkin = false;
+		}
+		for (int i = 0; i < BulletVector.size(); i++) {
 			BulletVector[i].MoveBullet();
 			window.draw(BulletVector[i].bullet);
+		}
+		if (ShotSkin == false) {
+			player.setTexture(playerskin);
+		}
+		else if (ShotSkin == true) {
+			player.setTexture(playershoot);
+		}
 	}
 		
 }
 
-	
+// Clock bullettimet;
+// if (bullettimet.getElapsedTime[asSeconds] > 2) {
+
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
 // Debug program: F5 or Debug > Start Debugging menu
