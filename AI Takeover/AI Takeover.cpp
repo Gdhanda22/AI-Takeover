@@ -132,8 +132,6 @@ int main()
 			}
 			if (Shooting) {
 				time = clock();
-				if (time == .2 and player.setTexture == playerskin) {
-					player.setTexture(playerShoot);
 
 				}
 			}
