@@ -57,11 +57,11 @@ int main()
 	name.setScale(6, 6);
 	Sprite description;
 	Texture defendcastle;
-	defendcastle.loadFromFile(".png");
+	defendcastle.loadFromFile("name.png");
 	description.setTexture(defendcastle);
-	description.setOrigin();
-	description.setScale();
-	description.setPosition();
+	description.setOrigin(50, 50);
+	description.setScale(6.5, 6.5);
+	description.setPosition(346.5, 263.55);
 	Sprite start;
 	Texture startbutton;
 	startbutton.loadFromFile("start.png");
@@ -73,6 +73,7 @@ int main()
 	// Shooting Stuff
 	vector<PlayerBullet> BulletVector;
 	Clock clock;
+	Clock clock2;
 
 	// Movement
 	bool PlayerLeft = false;
@@ -80,6 +81,7 @@ int main()
 	bool Shooting = false;
 	bool Playing = false;
 	bool ShotSkin = false;
+	bool NameSize = false;
 
 	RenderWindow window(VideoMode(693, 900), "Game Window");
 	while (window.isOpen()) {
@@ -92,12 +94,10 @@ int main()
 						player.setPosition(346.5, 835);
 					}
 				}
-				
 				if (event.type == Event::Closed) {
 					window.close();
 				}
 			}
-
 			if (event.type == Event::KeyPressed) {
 				if (event.key.code == Keyboard::D) {
 					PlayerRight = true;
@@ -140,6 +140,14 @@ int main()
 			window.display();
 		}
 		else {
+			if ((clock2.getElapsedTime().asSeconds() >= .6 and NameSize == true)) {
+				NameSize = false;
+				clock2.restart();
+			}
+			else if ((clock2.getElapsedTime().asSeconds() >= .6 and NameSize == false)) {
+				NameSize = true;
+				clock2.restart();
+			}
 			window.clear();
 			window.draw(background);
 			window.draw(name);
@@ -179,6 +187,12 @@ int main()
 		}
 		else if (ShotSkin == true) {
 			player.setTexture(playershoot);
+		}
+		if (!NameSize) {
+			description.setScale(6.5, 6.5);
+		}
+		else if (NameSize) {
+			description.setScale(6.8, 6.8);
 		}
 	}
 		
