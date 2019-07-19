@@ -50,22 +50,28 @@ int main()
 	// Start Screen Stuff
 	Sprite name;
 	Texture aitakeover;
-	aitakeover.loadFromFile("name.png");
+	aitakeover.loadFromFile(".png");
 	name.setTexture(aitakeover);
 	name.setPosition(346.5, 200);
 	name.setOrigin(45.5, 7);
 	name.setScale(6, 6);
+	Sprite description;
+	Texture defendcastle;
+	defendcastle.loadFromFile(".png");
+	description.setTexture(defendcastle);
+	description.setOrigin();
+	description.setScale();
+	description.setPosition();
 	Sprite start;
 	Texture startbutton;
 	startbutton.loadFromFile("start.png");
 	start.setTexture(startbutton);
-	start.setPosition(346.5, 450);
+	start.setPosition(346.5, 458.5);
 	start.setScale(6.5, 6.5);
 	start.setOrigin(50, 50);
 
 	// Shooting Stuff
 	vector<PlayerBullet> BulletVector;
-	
 	Clock clock;
 
 	// Movement
@@ -138,6 +144,7 @@ int main()
 			window.draw(background);
 			window.draw(name);
 			window.draw(start);
+			window.draw(description);
 			window.display();
 		}
 
