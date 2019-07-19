@@ -28,6 +28,8 @@ int main()
 	player.setOrigin(50, 50);
 	player.setPosition(346.5, 835);
 	player.setScale(1.75, 1.75);
+	int shootingskinstuff;
+	shootingskinstuff = 1;
 
 	// The Background
 	Sprite background;
@@ -61,6 +63,9 @@ int main()
 	start.setScale(6.5, 6.5);
 	start.setOrigin(50, 50);
 
+	// Shooting Stuff
+	clock_t time;
+
 	// Movement
 	bool PlayerLeft = false;
 	bool PlayerRight = false;
@@ -71,15 +76,15 @@ int main()
 	while (window.isOpen()) {
 		Event event;
 		while (window.pollEvent(event)) {
-			if (Playing == false) {
+			if (!Playing) {
 				if (event.type == Event::MouseButtonPressed) {
 					if (start.getGlobalBounds().contains((Vector2f)Mouse::getPosition(window))) {
 						Playing = true;
+						player.setPosition(346.5, 835);
 					}
 				}
 				window.clear();
 				window.draw(background);
-				window.draw(player);
 				window.draw(name);
 				window.draw(start);
 				window.display();
@@ -87,52 +92,59 @@ int main()
 					window.close();
 				}
 			}
-			if (Playing == true) {
-				if (event.type == Event::KeyPressed) {
-					if (event.key.code == Keyboard::D) {
-						PlayerRight = true;
-					}
-					if (event.key.code == Keyboard::A) {
-						PlayerLeft = true;
-					}
-					if (event.key.code == Keyboard::Space) {
-						Shooting = true;
-					}
-				}
-				if (event.type == Event::KeyReleased) {
-					if (event.key.code == Keyboard::D) {
-						PlayerRight = false;
-					}
-					if (event.key.code == Keyboard::A) {
-						PlayerLeft = false;
-					}
-					if (event.key.code == Keyboard::Space) {
-						Shooting = false;
-					}
-				}
-				if (event.type == Event::Closed) {
-					window.close();
-				}
-				if (PlayerRight and player.getPosition().x < 593) {
-					player.setPosition((player.getPosition().x + 3.75), (player.getPosition().y));
-				}
-				if (PlayerLeft and player.getPosition().x > 100) {
-					player.setPosition((player.getPosition().x - 3.75), (player.getPosition().y));
-				}
-				if (Shooting) {
-					player.setTexture(playershoot);
-				}
-				else {
-					player.setTexture(playerskin);
-				}
+			if (Playing) {
 				window.clear();
 				window.draw(background);
 				window.draw(player);
 				window.display();
+			}
+
+			if (event.type == Event::KeyPressed) {
+				if (event.key.code == Keyboard::D) {
+					PlayerRight = true;
+				}
+				if (event.key.code == Keyboard::A) {
+					PlayerLeft = true;
+				}
+				if (event.key.code == Keyboard::Space) {
+					Shooting = true;
 				}
 			}
+			if (event.type == Event::KeyReleased) {
+				if (event.key.code == Keyboard::D) {
+					PlayerRight = false;
+				}
+				if (event.key.code == Keyboard::A) {
+					PlayerLeft = false;
+				}
+				if (event.key.code == Keyboard::Space) {
+					Shooting = false;
+				}
+			}
+			if (event.type == Event::Closed) {
+				window.close();
+			}
+			if (PlayerRight and player.getPosition().x < 593) {
+				player.setPosition((player.getPosition().x + 4), (player.getPosition().y));
+			}
+			if (PlayerLeft and player.getPosition().x > 100) {
+				player.setPosition((player.getPosition().x - 4), (player.getPosition().y));
+			}
+			if (Shooting) {
+				time = clock();
+				if (time == .2 and player.setTexture == playerskin) {
+					player.setTexture(playerShoot);
+
+				}
+			}
+			else {
+				player.setTexture(playerskin);
+			}
+		}
 		}	
 	}
+
+	
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
 // Debug program: F5 or Debug > Start Debugging menu
