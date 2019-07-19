@@ -9,7 +9,7 @@ PlayerBullet::PlayerBullet(Vector2f)
 	bullet.setPosition((player.getPosition().x + 5), 825)
 }
 
-void PlayerBullet::MoveBullet(int bulletstate) {
+void PlayerBullet::MoveBullet() {
 	while (bullet.getPosition().y > 30) {
 		bullet.setPosition(bullet.getPosition().x, bullet.getPosition().y + 2);
 	}
