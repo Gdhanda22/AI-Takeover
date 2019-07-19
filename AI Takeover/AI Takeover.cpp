@@ -130,19 +130,21 @@ int main()
 			if (PlayerLeft and player.getPosition().x > 100) {
 				player.setPosition((player.getPosition().x - 4), (player.getPosition().y));
 			}
+			vector<PlayerBullet> BulletVector;
 			if (Shooting) {
-				time = clock();
-				if (time == .2 and player.setTexture == playerskin) {
-					player.setTexture(playerShoot);
-
-				}
+				PlayerBullet abullet();
+				BulletVector.push_back(abullet);
 			}
 			else {
 				player.setTexture(playerskin);
 			}
 		}
-		}	
+		for (int i = 0; i < BulletVector.size(); i++)
+			BulletVector[i].MoveBullet();
+			window.draw(BulletVector[i].bullet);
 	}
+		
+}
 
 	
 
