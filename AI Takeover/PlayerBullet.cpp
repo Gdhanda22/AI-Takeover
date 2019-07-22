@@ -23,9 +23,10 @@ PlayerBullet::PlayerBullet(Vector2f pos) {
 	bullet.setOrigin(16, 16);
 }
 
+
 void PlayerBullet::MoveBullet() {
 	
-	if (bullet.getPosition().y > -16) {
+	if (bullet.getPosition().y > -30) {
 
 		if (bulletmover.getElapsedTime().asSeconds() >= .00075) {
 			//cout << bullet.getPosition().y << " ";
@@ -35,7 +36,7 @@ void PlayerBullet::MoveBullet() {
 		}
 	}
 	else {
-		
+
 	}
 
 

@@ -38,6 +38,12 @@ int main()
 	background.setTexture(backgroundskin);
 	background.setOrigin(11, 0);
 	background.setScale(9, 9);
+	Sprite border;
+	Texture borderskin;
+	borderskin.loadFromFile("bordrz.png");
+	border.setTexture(borderskin);
+	border.setOrigin(11, 0);
+	border.setScale(9, 9);
 
 	//Pounder Stuff
 	sf::Sprite pounder;
@@ -130,6 +136,7 @@ int main()
 			window.clear();
 			window.draw(background);
 			window.draw(player);
+			window.draw(border);
 
 			for (PlayerBullet p : projectileVector) {
 				window.draw(p.bullet);
@@ -198,7 +205,12 @@ int main()
 		for (PlayerBullet &p : projectileVector) {
 			p.MoveBullet();
 		}
-
+		
+		for (int i = 0; i < projectileVector.size(); i++) {
+			if (projectileVector[i].bullet.getPosition().y < -16) {
+				projectileVector.erase(projectileVector.begin() + i);
+			}
+		}
 
 	}
 }
