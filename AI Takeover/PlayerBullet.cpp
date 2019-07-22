@@ -14,10 +14,9 @@ using namespace std;
 using namespace sf;
 
 
-PlayerBullet::PlayerBullet(Vector2f pos) {
+PlayerBullet::PlayerBullet(Vector2f pos, int skin) {
 
 	bulletskin = new Texture();
-	int skin = 1;
 	
 	switch (skin) {
 	case 1:

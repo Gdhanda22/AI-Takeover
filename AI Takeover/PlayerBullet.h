@@ -18,7 +18,7 @@ using namespace sf;
 class PlayerBullet
 {
 public:
-	PlayerBullet(Vector2f);
+	PlayerBullet(Vector2f, int);
 	Texture* bulletskin;
 	Sprite bullet;
 	Clock bulletmover;

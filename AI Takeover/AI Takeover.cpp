@@ -12,6 +12,7 @@
 #include <fstream>
 #include <vector>
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <Windows.h>
 using namespace std;
 using namespace sf;
@@ -33,19 +34,23 @@ int main()
 
 	// Skin Selection 
 	Sprite fakeNiv;
-	Texture archerNiv;
-	archerNiv.loadFromFile("fullarrow.png");
-	fakeNiv.setTexture(archerNiv);
+	Texture fullarrow;
+	fullarrow.loadFromFile("fullarrow.png");
+	Texture halfarrow;
+	halfarrow.loadFromFile("halfarrow.png");
+	Texture noarrow;
+	noarrow.loadFromFile("noarrow.png");
+	fakeNiv.setTexture(fullarrow);
 	fakeNiv.setOrigin(50, 50);
-	fakeNiv.setPosition(346.5, 700);
-	fakeNiv.setScale(2.25, 2.25);
+	fakeNiv.setPosition(147, 655);
+	fakeNiv.setScale(2.2, 2.2);
 
 	Sprite fakeJux; 
 	Texture gunnerJux;
 	gunnerJux.loadFromFile("player.png");
 	fakeJux.setTexture(gunnerJux);
 	fakeJux.setOrigin(50, 50);
-	fakeJux.setPosition(146.5, 700);
+	fakeJux.setPosition(341, 658);
 	fakeJux.setScale(2.3, 2.3);
 
 	Sprite fakeDel;
@@ -53,8 +58,10 @@ int main()
 	throwerDel.loadFromFile("yodel.png");
 	fakeDel.setTexture(throwerDel);
 	fakeDel.setOrigin(50, 50);
-	fakeDel.setPosition(546.5, 700);
-	fakeDel.setScale(2.1, 2.1);
+	fakeDel.setPosition(529, 669);
+	fakeDel.setScale(1.95, 1.95);
+
+	int skin = 1;
 
 
 	// The Background
@@ -108,6 +115,8 @@ int main()
 	bool ShotSkin = false;
 	bool NameSize = false;
 
+	int arrow = 3;
+
 	RenderWindow window(VideoMode(693, 900), "Game Window");
 	while (window.isOpen()) {
 		Event event;
@@ -117,6 +126,18 @@ int main()
 					if (start.getGlobalBounds().contains((Vector2f)Mouse::getPosition(window))) {
 						Playing = true;
 						player.setPosition(346.5, 835);
+					}
+					if (fakeJux.getGlobalBounds().contains((Vector2f)Mouse::getPosition(window))) {
+						skin = 1;
+						player.setTexture(playerskin);
+					}
+					if (fakeNiv.getGlobalBounds().contains((Vector2f)Mouse::getPosition(window))) {
+						skin = 2;
+						player.setTexture(fullarrow);
+					}
+					if (fakeDel.getGlobalBounds().contains((Vector2f)Mouse::getPosition(window))) {
+						skin = 3;
+						player.setTexture(throwerDel);
 					}
 				}
 				if (event.type == Event::Closed) {
@@ -145,7 +166,18 @@ int main()
 				}
 				if (event.key.code == Keyboard::Space) {
 					Shooting = false;
-					player.setTexture(playerskin);
+					switch (skin) {
+					case 1: 
+						player.setTexture(playerskin);
+						break;
+					case 2:
+						player.setTexture(fullarrow);
+						break;
+					case 3:
+						player.setTexture(throwerDel);
+						break;
+					}
+					
 				}
 			}
 			if (event.type == Event::Closed) {
@@ -175,7 +207,7 @@ int main()
 			window.display();
 		}
 
-		if (PlayerRight and player.getPosition().x < 593) {
+		if (PlayerRight and player.getPosition().x < 585) {
 			player.setPosition((player.getPosition().x + .25), (player.getPosition().y));
 		}
 		if (PlayerLeft and player.getPosition().x > 50) {
@@ -183,22 +215,45 @@ int main()
 		}
 
 		if (Shooting) {
-			player.setTexture(playershoot);
-			if ((clock.getElapsedTime().asSeconds() >= .075 and ShotSkin == true)) {
-				ShotSkin = false;
-				clock.restart();
-			}
-			else if ((clock.getElapsedTime().asSeconds() >= .075 and ShotSkin == false)) {
-				ShotSkin = true;
-				PlayerBullet projectile(Vector2f(player.getPosition().x + 28, player.getPosition().y - 80));
-				projectileVector.push_back(projectile);
-				clock.restart();
+			switch (skin) {
+			case 1:
+				player.setTexture(playershoot);
+				if ((clock.getElapsedTime().asSeconds() >= .075 and ShotSkin == true)) {
+					ShotSkin = false;
+					clock.restart();
+				}
+				else if ((clock.getElapsedTime().asSeconds() >= .075 and ShotSkin == false)) {
+					ShotSkin = true;
+					PlayerBullet projectile(Vector2f(player.getPosition().x + 28, player.getPosition().y - 80), skin);
+					projectileVector.push_back(projectile);
+					clock.restart();
+				}
+				break;
+			case 2:
+				player.setTexture(fullarrow);
+				if ((clock.getElapsedTime().asSeconds() >= .065 and arrow == 1 )) {
+					arrow = 2;
+					clock.restart();
+				}
+				else if ((clock.getElapsedTime().asSeconds() >= .065 and arrow == 2)) {
+					arrow = 3;
+					clock.restart();
+				}
+				else if ((clock.getElapsedTime().asSeconds() >= .065 and arrow == 3)) {
+					arrow = 1;
+					PlayerBullet projectile(Vector2f(player.getPosition().x + 28, player.getPosition().y - 80), skin);
+					projectileVector.push_back(projectile);
+					clock.restart();
+				}
+				break;
+
 			}
 		}
 
 		else if (!Shooting) {
 			player.setTexture(playerskin);
 			ShotSkin = false;
+			arrow = 3;
 		}
 
 		if (ShotSkin == false) {
@@ -220,6 +275,16 @@ int main()
 		}
 		else if (NameSize) {
 			name.setScale(6.7, 6.7);
+		}
+
+		if (arrow == 1 and skin == 2) {
+			player.setTexture(halfarrow);
+		}
+		if (arrow == 2 and skin == 2) {
+			player.setTexture(noarrow);
+		}
+		if (arrow == 3 and skin == 2) {
+			player.setTexture(fullarrow);
 		}
 
 		for (PlayerBullet &p : projectileVector) {
