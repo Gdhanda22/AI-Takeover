@@ -19,8 +19,9 @@ class PlayerBullet
 {
 public:
 	PlayerBullet(Vector2f);
-	Texture bulletskin;
+	Texture* bulletskin;
 	Sprite bullet;
 	Clock bulletmover;
+	void MoveBullet();
 };
 

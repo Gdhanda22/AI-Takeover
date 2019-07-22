@@ -15,32 +15,28 @@ using namespace sf;
 
 
 PlayerBullet::PlayerBullet(Vector2f pos) {
-	
-	switch skin{
-	case 1:
-		bulletskin.loadFromFile("bullet.pixelart.png");
-		break:
-	case 2:
-		bulletskin.loadFromFile("");
-		break;
-	case 3:
-		bulletskin.loadFromFile("");
-		break;
-	}
-	
-	bullet.setTexture(bulletskin);
+
+	bulletskin = new Texture();
+	bulletskin->loadFromFile("bullet.png");
+	bullet.setTexture(*bulletskin);
 	bullet.setPosition(pos);
-	bullet.setScale(5, 5);
-	window.draw(bullet)
+	bullet.setOrigin(16, 16);
+}
 
-	while (bullet.getPosition().y > 30) {
-		if (bulletmover.getElapsedTime().asSeconds() >= .05) {
+void PlayerBullet::MoveBullet() {
+	
+	if (bullet.getPosition().y > -16) {
 
-			bullet.setPosition(bullet.getPosition().x, bullet.getPosition().y - 2);
+		if (bulletmover.getElapsedTime().asSeconds() >= .00075) {
+			//cout << bullet.getPosition().y << " ";
+			bullet.setPosition(bullet.getPosition().x, bullet.getPosition().y - 1);
+			//cout << bullet.getPosition().y << endl;
 			bulletmover.restart();
-			window.draw(bullet)
-
 		}
 	}
+	else {
+		
+	}
+
 
 }

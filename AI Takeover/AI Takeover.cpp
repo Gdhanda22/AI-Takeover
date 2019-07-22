@@ -49,19 +49,12 @@ int main()
 
 	// Start Screen Stuff
 	Sprite name;
-	Texture aitakeover;
-	aitakeover.loadFromFile(".png");
-	name.setTexture(aitakeover);
-	name.setPosition(346.5, 200);
-	name.setOrigin(45.5, 7);
-	name.setScale(6, 6);
-	Sprite description;
-	Texture defendcastle;
-	defendcastle.loadFromFile("name.png");
-	description.setTexture(defendcastle);
-	description.setOrigin(50, 50);
-	description.setScale(6.5, 6.5);
-	description.setPosition(346.5, 263.55);
+	Texture nameskin;
+	nameskin.loadFromFile("name.png");
+	name.setTexture(nameskin);
+	name.setOrigin(50, 50);
+	name.setScale(6.5, 6.5);
+	name.setPosition(346.5, 263.55);
 	Sprite start;
 	Texture startbutton;
 	startbutton.loadFromFile("start.png");
@@ -71,9 +64,9 @@ int main()
 	start.setOrigin(50, 50);
 
 	// Shooting Stuff
-	vector<PlayerBullet> BulletVector;
 	Clock clock;
 	Clock clock2;
+	vector<PlayerBullet> projectileVector;
 
 	// Movement
 	bool PlayerLeft = false;
@@ -137,14 +130,19 @@ int main()
 			window.clear();
 			window.draw(background);
 			window.draw(player);
+
+			for (PlayerBullet p : projectileVector) {
+				window.draw(p.bullet);
+			}
+
 			window.display();
+
 		}
 		else {
 			window.clear();
 			window.draw(background);
-			window.draw(name);
 			window.draw(start);
-			window.draw(description);
+			window.draw(name);
 			window.display();
 		}
 
@@ -152,25 +150,24 @@ int main()
 		if (PlayerRight and player.getPosition().x < 593) {
 			player.setPosition((player.getPosition().x + .2), (player.getPosition().y));
 		}
-		if (PlayerLeft and player.getPosition().x > 100) {
+		if (PlayerLeft and player.getPosition().x > 50) {
 			player.setPosition((player.getPosition().x - .2), (player.getPosition().y));
 		}
 
-		vector<PlayerBullet> projectiveVector;
-
 		if (Shooting) {
 			player.setTexture(playershoot);
-			if ((clock.getElapsedTime().asSeconds() >= .089 and ShotSkin == true)) {
+			if ((clock.getElapsedTime().asSeconds() >= .075 and ShotSkin == true)) {
 				ShotSkin = false;
 				clock.restart();
 			}
-			else if ((clock.getElapsedTime().asSeconds() >= .089 and ShotSkin == false)) {
+			else if ((clock.getElapsedTime().asSeconds() >= .075 and ShotSkin == false)) {
 				ShotSkin = true;
-				PlayerBullet projectile(Vector2f(player.getPosition().x + 10, player.getPosition().y - 15));
+				PlayerBullet projectile(Vector2f(player.getPosition().x + 28, player.getPosition().y - 80));
 				projectileVector.push_back(projectile);
 				clock.restart();
 			}
 		}
+
 		else if (!Shooting) {
 			player.setTexture(playerskin);
 			ShotSkin = false;
@@ -182,20 +179,26 @@ int main()
 		else if (ShotSkin == true) {
 			player.setTexture(playershoot);
 		}
-		if ((clock2.getElapsedTime().asSeconds() >= .55 and NameSize == true)) {
+		if ((clock2.getElapsedTime().asSeconds() >= .5 and NameSize == true)) {
 			NameSize = false;
 			clock2.restart();
 		}
-		else if ((clock2.getElapsedTime().asSeconds() >= .55 and NameSize == false)) {
+		else if ((clock2.getElapsedTime().asSeconds() >= .5 and NameSize == false)) {
 			NameSize = true;
 			clock2.restart();
 		}
 		if (!NameSize) {
-			description.setScale(6.5, 6.5);
+			name.setScale(6.6, 6.6);
 		}
 		else if (NameSize) {
-			description.setScale(6.8, 6.8);
+			name.setScale(6.85, 6.85);
 		}
+
+
+		for (PlayerBullet &p : projectileVector) {
+			p.MoveBullet();
+		}
+
 
 	}
 }
