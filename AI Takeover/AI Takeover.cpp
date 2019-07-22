@@ -31,6 +31,32 @@ int main()
 	int shootingskinstuff;
 	shootingskinstuff = 1;
 
+	// Skin Selection 
+	Sprite fakeNiv;
+	Texture archerNiv;
+	archerNiv.loadFromFile("fullarrow.png");
+	fakeNiv.setTexture(archerNiv);
+	fakeNiv.setOrigin(50, 50);
+	fakeNiv.setPosition(346.5, 700);
+	fakeNiv.setScale(2.25, 2.25);
+
+	Sprite fakeJux; 
+	Texture gunnerJux;
+	gunnerJux.loadFromFile("player.png");
+	fakeJux.setTexture(gunnerJux);
+	fakeJux.setOrigin(50, 50);
+	fakeJux.setPosition(146.5, 700);
+	fakeJux.setScale(2.3, 2.3);
+
+	Sprite fakeDel;
+	Texture throwerDel;
+	throwerDel.loadFromFile("yodel.png");
+	fakeDel.setTexture(throwerDel);
+	fakeDel.setOrigin(50, 50);
+	fakeDel.setPosition(546.5, 700);
+	fakeDel.setScale(2.1, 2.1);
+
+
 	// The Background
 	Sprite background;
 	Texture backgroundskin;
@@ -125,10 +151,6 @@ int main()
 			if (event.type == Event::Closed) {
 				window.close();
 			}
-			
-		// PlayerBullet abullet(Vector2f((player.getPosition().x + 5), (player.getPosition().y - 10)));
-		// BulletVector.push_back(abullet);
-
 		}
 
 		if (Playing) {
@@ -137,28 +159,27 @@ int main()
 			window.draw(background);
 			window.draw(player);
 			window.draw(border);
-
 			for (PlayerBullet p : projectileVector) {
 				window.draw(p.bullet);
 			}
-
 			window.display();
-
 		}
 		else {
 			window.clear();
 			window.draw(background);
 			window.draw(start);
 			window.draw(name);
+			window.draw(fakeNiv);
+			window.draw(fakeJux);
+			window.draw(fakeDel);
 			window.display();
 		}
 
-
 		if (PlayerRight and player.getPosition().x < 593) {
-			player.setPosition((player.getPosition().x + .2), (player.getPosition().y));
+			player.setPosition((player.getPosition().x + .25), (player.getPosition().y));
 		}
 		if (PlayerLeft and player.getPosition().x > 50) {
-			player.setPosition((player.getPosition().x - .2), (player.getPosition().y));
+			player.setPosition((player.getPosition().x - .25), (player.getPosition().y));
 		}
 
 		if (Shooting) {
@@ -195,12 +216,11 @@ int main()
 			clock2.restart();
 		}
 		if (!NameSize) {
-			name.setScale(6.6, 6.6);
+			name.setScale(6.45, 6.45);
 		}
 		else if (NameSize) {
-			name.setScale(6.85, 6.85);
+			name.setScale(6.7, 6.7);
 		}
-
 
 		for (PlayerBullet &p : projectileVector) {
 			p.MoveBullet();
@@ -211,21 +231,5 @@ int main()
 				projectileVector.erase(projectileVector.begin() + i);
 			}
 		}
-
 	}
 }
-
-// Clock bullettimet;
-// if (bullettimet.getElapsedTime[asSeconds] > 2) {
-
-
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
-
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file

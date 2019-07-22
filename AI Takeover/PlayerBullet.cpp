@@ -17,8 +17,9 @@ using namespace sf;
 PlayerBullet::PlayerBullet(Vector2f pos) {
 
 	bulletskin = new Texture();
+	int skin = 1;
 	
-	switch skin {
+	switch (skin) {
 	case 1:
 		bulletskin->loadFromFile("bullet.png");
 		break;
