@@ -22,6 +22,5 @@ public:
 	Texture bulletskin;
 	Sprite bullet;
 	Clock bulletmover;
-	void MoveBullet();
 };
 
