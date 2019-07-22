@@ -17,7 +17,18 @@ using namespace sf;
 PlayerBullet::PlayerBullet(Vector2f pos) {
 
 	bulletskin = new Texture();
-	bulletskin->loadFromFile("bullet.png");
+	
+	switch skin {
+	case 1:
+		bulletskin->loadFromFile("bullet.png");
+		break;
+	case 2:
+		bulletskin->loadFromFile("arrow.png");
+		break;
+	case 3:
+		bulletskin->loadFromFile("ball.png");
+	}
+	
 	bullet.setTexture(*bulletskin);
 	bullet.setPosition(pos);
 	bullet.setOrigin(16, 16);
@@ -35,9 +46,5 @@ void PlayerBullet::MoveBullet() {
 			bulletmover.restart();
 		}
 	}
-	else {
-
-	}
-
 
 }
