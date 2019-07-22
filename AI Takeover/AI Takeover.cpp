@@ -68,7 +68,7 @@ int main()
 	start.setTexture(startbutton);
 	start.setPosition(346.5, 458.5);
 	start.setScale(6.5, 6.5);
-	start.setOrigin(50, 50);
+	start.setOrigin(49.5, 33.5);
 
 	// Shooting Stuff
 	vector<PlayerBullet> BulletVector;
@@ -140,14 +140,6 @@ int main()
 			window.display();
 		}
 		else {
-			if ((clock2.getElapsedTime().asSeconds() >= .6 and NameSize == true)) {
-				NameSize = false;
-				clock2.restart();
-			}
-			else if ((clock2.getElapsedTime().asSeconds() >= .6 and NameSize == false)) {
-				NameSize = true;
-				clock2.restart();
-			}
 			window.clear();
 			window.draw(background);
 			window.draw(name);
@@ -188,6 +180,14 @@ int main()
 		else if (ShotSkin == true) {
 			player.setTexture(playershoot);
 		}
+		if ((clock2.getElapsedTime().asSeconds() >= .55 and NameSize == true)) {
+			NameSize = false;
+			clock2.restart();
+		}
+		else if ((clock2.getElapsedTime().asSeconds() >= 55 and NameSize == false)) {
+			NameSize = true;
+			clock2.restart();
+		}
 		if (!NameSize) {
 			description.setScale(6.5, 6.5);
 		}
@@ -195,7 +195,6 @@ int main()
 			description.setScale(6.8, 6.8);
 		}
 	}
-		
 }
 
 // Clock bullettimet;
