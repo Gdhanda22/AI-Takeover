@@ -242,16 +242,16 @@ int main()
 		}
 
 		if (PlayerRight and player.getPosition().x < 1332 and skin != 3) {
-			player.setPosition((player.getPosition().x + .35), (player.getPosition().y));
+			player.setPosition((player.getPosition().x + speed), (player.getPosition().y));
 		}
 		if (PlayerLeft and player.getPosition().x > 50 and skin != 3) {
-			player.setPosition((player.getPosition().x - .35), (player.getPosition().y));
+			player.setPosition((player.getPosition().x - speed), (player.getPosition().y));
 		}
 		if (PlayerRight and player.getPosition().x < 1282 and skin == 3) {
-			player.setPosition((player.getPosition().x + .35), (player.getPosition().y));
+			player.setPosition((player.getPosition().x + speed), (player.getPosition().y));
 		}
 		if (PlayerLeft and player.getPosition().x > 15 and skin == 3) {
-			player.setPosition((player.getPosition().x - .35), (player.getPosition().y));
+			player.setPosition((player.getPosition().x - speed), (player.getPosition().y));
 		}
 
 		if (Shooting) {
@@ -308,6 +308,7 @@ int main()
 			ShotSkin = false;
 			arrow = 3;
 			Yeeter = true;
+			slow = false;
 		}
 
 		if (ShotSkin == false) {
@@ -376,10 +377,10 @@ int main()
 		}
 
 		if (slow) {
-			speed = .35;
+			speed = .25;
 		}
-		else {
-			speed = .45;
+		else if (!slow) {
+			speed = .55;
 		}
 
 		for (Ranger &p : rangerVector) {
