@@ -115,6 +115,10 @@ int main()
 	start.setScale(6.6969696969, 6.6969696969);
 	start.setOrigin(50, 50);
 
+	// Ranger Spawning Timers and Stuff
+	Clock decreasetime;
+	double decreasethedecrease = 0;
+
 	// Shooting Stuff
 	Clock clock;
 	Clock clock2;
@@ -348,7 +352,7 @@ int main()
 			p.MoveBullet();
 			for (int i = 0; i < rangerVector.size(); i++) {
 				if (rangerVector[i].ranger.getGlobalBounds().contains(p.bullet.getPosition())) {
-				cout << "yeet" << endl;
+				//bullet explodes and ranger runs hit function or something
 				}
 			}
 		}
@@ -366,6 +370,12 @@ int main()
 				enemy.restart();
 			}
 		}
+		if (decreasetime.getElapsedTime().asSeconds() >= 60 - decreasethedecrease and rangertime > 1) {
+			decreasethedecrease += .5;
+			rangertime -= .05;
+			decreasetime.restart();
+		}
+
 
 		if (slow) {
 			speed = .3;
