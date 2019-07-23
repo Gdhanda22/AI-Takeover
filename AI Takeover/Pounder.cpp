@@ -13,10 +13,8 @@
 using namespace std;
 
 
-Pounder::Pounder() {
-Public:
-	pounderskin.loadFromFile("pounder.png");
-	pounder.setTexture(pounderskin);
-	pounder.setPosition(200, 200);
-}
+//Pounder::Pounder() {
+//Public:
+
+//}
 

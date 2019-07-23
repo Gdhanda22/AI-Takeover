@@ -35,17 +35,17 @@ PlayerBullet::PlayerBullet(Vector2f pos, int skin) {
 	bullet.setOrigin(16, 16);
 }
 
+PlayerBullet::~PlayerBullet() {
+	//delete(bulletskin);
+}
 
 void PlayerBullet::MoveBullet() {
 	
 	if (bullet.getPosition().y > -30) {
 
 		if (bulletmover.getElapsedTime().asSeconds() >= .00075) {
-			//cout << bullet.getPosition().y << " ";
 			bullet.setPosition(bullet.getPosition().x, bullet.getPosition().y - 1);
-			//cout << bullet.getPosition().y << endl;
 			bulletmover.restart();
 		}
 	}
-
 }

@@ -118,7 +118,10 @@ int main()
 	// Shooting Stuff
 	Clock clock;
 	Clock clock2;
+	Clock enemy;
 	vector<PlayerBullet> projectileVector;
+	vector<Ranger> rangerVector;
+	random_device rangerx;
 
 	// Movement
 	bool PlayerLeft = false;
@@ -128,6 +131,7 @@ int main()
 	bool ShotSkin = false;
 	bool NameSize = false;
 	bool Yeeter = false;
+	bool EnemySpawn = false;
 
 	int arrow = 3;
 
@@ -174,8 +178,9 @@ int main()
 				}
 				if (event.key.code == Keyboard::Space) {
 					Shooting = true;
-
-					
+				}
+				if (event.key.code == Keyboard::E) {
+					EnemySpawn = true;
 				}
 			}
 			if (event.type == Event::KeyReleased) {
@@ -200,6 +205,9 @@ int main()
 					}
 					
 				}
+				if (event.key.code == Keyboard::E) {
+					EnemySpawn = false;
+				}
 			}
 			if (event.type == Event::Closed) {
 				window.close();
@@ -213,6 +221,9 @@ int main()
 			window.draw(player);
 			for (PlayerBullet p : projectileVector) {
 				window.draw(p.bullet);
+			}
+			for (Ranger p :rangerVector) {
+				window.draw(p.ranger);
 			}
 			window.draw(top);
 			window.draw(border);
@@ -229,10 +240,16 @@ int main()
 			window.display();
 		}
 
-		if (PlayerRight and player.getPosition().x < 585) {
+		if (PlayerRight and player.getPosition().x < 585 and skin != 3) {
 			player.setPosition((player.getPosition().x + .25), (player.getPosition().y));
 		}
-		if (PlayerLeft and player.getPosition().x > 50) {
+		if (PlayerLeft and player.getPosition().x > 50 and skin != 3) {
+			player.setPosition((player.getPosition().x - .25), (player.getPosition().y));
+		}
+		if (PlayerRight and player.getPosition().x < 535 and skin == 3) {
+			player.setPosition((player.getPosition().x + .25), (player.getPosition().y));
+		}
+		if (PlayerLeft and player.getPosition().x > 15 and skin == 3) {
 			player.setPosition((player.getPosition().x - .25), (player.getPosition().y));
 		}
 
@@ -337,6 +354,17 @@ int main()
 			if (projectileVector[i].bullet.getPosition().y < -16) {
 				projectileVector.erase(projectileVector.begin() + i);
 			}
+		}
+		if (EnemySpawn) {
+			if (enemy.getElapsedTime().asSeconds() >= 1) {
+				Ranger ranger(Vector2f((rangerx() % 450), 0));
+				rangerVector.push_back(ranger);
+				enemy.restart();
+			}
+		}
+
+		for (Ranger &p : rangerVector) {
+			p.moveRanger();
 		}
 	}
 }

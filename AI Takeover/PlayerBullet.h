@@ -19,6 +19,7 @@ class PlayerBullet
 {
 public:
 	PlayerBullet(Vector2f, int);
+	~PlayerBullet();
 	Texture* bulletskin;
 	Sprite bullet;
 	Clock bulletmover;
