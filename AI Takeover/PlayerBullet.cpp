@@ -27,6 +27,7 @@ PlayerBullet::PlayerBullet(Vector2f pos, int skin) {
 		break;
 	case 3:
 		bulletskin->loadFromFile("ball.png");
+		bullet.setScale(.8, .8);
 	}
 	
 	bullet.setTexture(*bulletskin);

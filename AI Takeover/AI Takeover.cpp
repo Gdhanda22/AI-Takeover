@@ -50,12 +50,14 @@ int main()
 	gunnerJux.loadFromFile("player.png");
 	fakeJux.setTexture(gunnerJux);
 	fakeJux.setOrigin(50, 50);
-	fakeJux.setPosition(341, 658);
+	fakeJux.setPosition(342, 658);
 	fakeJux.setScale(2.3, 2.3);
 
 	Sprite fakeDel;
 	Texture throwerDel;
-	throwerDel.loadFromFile("yodel.png");
+	throwerDel.loadFromFile("withball.png");
+	Texture yeet;
+	yeet.loadFromFile("withoutball.png");
 	fakeDel.setTexture(throwerDel);
 	fakeDel.setOrigin(50, 50);
 	fakeDel.setPosition(529, 669);
@@ -77,6 +79,13 @@ int main()
 	border.setTexture(borderskin);
 	border.setOrigin(11, 0);
 	border.setScale(9, 9);
+	Sprite top;
+	Texture topskin;
+	topskin.loadFromFile("top.png");
+	top.setTexture(topskin);
+	top.setPosition(-63, -360);
+	top.setScale(9, 9);
+
 
 	//Pounder Stuff
 	sf::Sprite pounder;
@@ -114,6 +123,7 @@ int main()
 	bool Playing = false;
 	bool ShotSkin = false;
 	bool NameSize = false;
+	bool Yeeter = false;
 
 	int arrow = 3;
 
@@ -123,10 +133,6 @@ int main()
 		while (window.pollEvent(event)) {
 			if (!Playing) {
 				if (event.type == Event::MouseButtonPressed) {
-					if (start.getGlobalBounds().contains((Vector2f)Mouse::getPosition(window))) {
-						Playing = true;
-						player.setPosition(346.5, 835);
-					}
 					if (fakeJux.getGlobalBounds().contains((Vector2f)Mouse::getPosition(window))) {
 						skin = 1;
 						player.setTexture(playerskin);
@@ -138,6 +144,17 @@ int main()
 					if (fakeDel.getGlobalBounds().contains((Vector2f)Mouse::getPosition(window))) {
 						skin = 3;
 						player.setTexture(throwerDel);
+					}
+					if (start.getGlobalBounds().contains((Vector2f)Mouse::getPosition(window))) {
+						Playing = true;
+						switch (skin) {
+						case 1:
+							player.setPosition(346.5, 835);
+						case 2:
+							player.setPosition(346.5, 830);
+						case 3:
+							player.setPosition(346.5, 835);
+						}
 					}
 				}
 				if (event.type == Event::Closed) {
@@ -190,10 +207,11 @@ int main()
 			window.clear();
 			window.draw(background);
 			window.draw(player);
-			window.draw(border);
 			for (PlayerBullet p : projectileVector) {
 				window.draw(p.bullet);
 			}
+			window.draw(top);
+			window.draw(border);
 			window.display();
 		}
 		else {
@@ -231,7 +249,7 @@ int main()
 				break;
 			case 2:
 				player.setTexture(fullarrow);
-				if ((clock.getElapsedTime().asSeconds() >= .065 and arrow == 1 )) {
+				if ((clock.getElapsedTime().asSeconds() >= .065 and arrow == 1)) {
 					arrow = 2;
 					clock.restart();
 				}
@@ -241,12 +259,24 @@ int main()
 				}
 				else if ((clock.getElapsedTime().asSeconds() >= .065 and arrow == 3)) {
 					arrow = 1;
-					PlayerBullet projectile(Vector2f(player.getPosition().x + 28, player.getPosition().y - 80), skin);
+					PlayerBullet projectile(Vector2f(player.getPosition().x + 30, player.getPosition().y - 72), skin);
 					projectileVector.push_back(projectile);
 					clock.restart();
 				}
 				break;
-
+			case 3:
+				player.setTexture(throwerDel);
+				if ((clock.getElapsedTime().asSeconds() >= .075 and Yeeter == true)) {
+					Yeeter = false;
+					PlayerBullet projectile(Vector2f(player.getPosition().x + 75, player.getPosition().y - 20), skin);
+					projectileVector.push_back(projectile);
+					clock.restart();
+				}
+				else if ((clock.getElapsedTime().asSeconds() >= .075 and Yeeter == false)) {
+					Yeeter = true;
+					clock.restart();
+				}
+				break;
 			}
 		}
 
@@ -254,6 +284,7 @@ int main()
 			player.setTexture(playerskin);
 			ShotSkin = false;
 			arrow = 3;
+			Yeeter = true;
 		}
 
 		if (ShotSkin == false) {
@@ -285,6 +316,13 @@ int main()
 		}
 		if (arrow == 3 and skin == 2) {
 			player.setTexture(fullarrow);
+		}
+
+		if (Yeeter and skin == 3) {
+			player.setTexture(throwerDel);
+		}
+		if (!Yeeter and skin == 3) {
+			player.setTexture(yeet);
 		}
 
 		for (PlayerBullet &p : projectileVector) {
