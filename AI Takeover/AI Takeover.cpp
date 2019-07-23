@@ -132,7 +132,8 @@ int main()
 	bool NameSize = false;
 	bool Yeeter = false;
 	bool EnemySpawn = false;
-
+	bool slow = false;
+	double speed = .45;
 	int arrow = 3;
 
 	RenderWindow window(VideoMode(1440, 900), "Game Window");
@@ -254,6 +255,7 @@ int main()
 		}
 
 		if (Shooting) {
+			slow = true;
 			switch (skin) {
 			case 1:
 				player.setTexture(playershoot);
@@ -348,14 +350,17 @@ int main()
 
 		for (PlayerBullet &p : projectileVector) {
 			p.MoveBullet();
-			//for (int i = 0; i < rangerVector.size(); i++) {
-				//if (projectileVector[j].bullet.getGlobalBounds().contains(rangerVector[i].ranger.getGlobalBounds)) {
-				//	projectileVector.erase(projectileVector.begin() + j);
-				//	rangerVector[i].Hit();
+			for (int i = 0; i < rangerVector.size(); i++) {
+				if (rangerVector[i].ranger.getGlobalBounds().contains(p.bullet.getPosition())) {
+					cout << "yeet" << endl;
+					
+
+					//projectileVector.erase(projectileVector.begin() + j);
+					//rangerVector[i].Hit();
 				}
 
-			//}
-		//}
+			}
+		}
 		
 		for (int i = 0; i < projectileVector.size(); i++) {
 			if (projectileVector[i].bullet.getPosition().y < 75) {
@@ -364,10 +369,17 @@ int main()
 		}
 		if (EnemySpawn) {
 			if (enemy.getElapsedTime().asSeconds() >= 1) {
-				Ranger ranger(Vector2f((rangerx() %543) + 75, 0));
+				Ranger ranger(Vector2f((rangerx() %1290) + 75, 0));
 				rangerVector.push_back(ranger);
 				enemy.restart();
 			}
+		}
+
+		if (slow) {
+			speed = .35;
+		}
+		else {
+			speed = .45;
 		}
 
 		for (Ranger &p : rangerVector) {
