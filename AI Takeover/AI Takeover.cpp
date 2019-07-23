@@ -27,8 +27,8 @@ int main()
 	playerskin.loadFromFile("player.png");
 	player.setTexture(playerskin);
 	player.setOrigin(50, 50);
-	player.setPosition(346.5, 835);
-	player.setScale(1.75, 1.75);
+	player.setPosition(720, 826);
+	player.setScale(1.85, 1.85);
 	int shootingskinstuff;
 	shootingskinstuff = 1;
 
@@ -71,19 +71,19 @@ int main()
 	Texture backgroundskin;
 	backgroundskin.loadFromFile("background.png");
 	background.setTexture(backgroundskin);
-	background.setOrigin(11, 0);
+	background.setOrigin(0, 0);
 	background.setScale(9, 9);
 	Sprite border;
 	Texture borderskin;
-	borderskin.loadFromFile("bordrz.png");
+	borderskin.loadFromFile("brdrz.png");
 	border.setTexture(borderskin);
-	border.setOrigin(11, 0);
+	border.setOrigin(0, 0);
 	border.setScale(9, 9);
 	Sprite top;
 	Texture topskin;
 	topskin.loadFromFile("top.png");
 	top.setTexture(topskin);
-	top.setPosition(-63, -360);
+	top.setPosition(0, 0);
 	top.setScale(9, 9);
 
 	Music music; 
@@ -106,13 +106,13 @@ int main()
 	name.setTexture(nameskin);
 	name.setOrigin(50, 50);
 	name.setScale(6.5, 6.5);
-	name.setPosition(346.5, 263.55);
+	name.setPosition(720, 263.55);
 	Sprite start;
 	Texture startbutton;
 	startbutton.loadFromFile("start.png");
 	start.setTexture(startbutton);
-	start.setPosition(346.5, 458.5);
-	start.setScale(6.5, 6.5);
+	start.setPosition(720, 450);
+	start.setScale(6.6969696969, 6.6969696969);
 	start.setOrigin(50, 50);
 
 	// Shooting Stuff
@@ -135,7 +135,7 @@ int main()
 
 	int arrow = 3;
 
-	RenderWindow window(VideoMode(693, 900), "Game Window");
+	RenderWindow window(VideoMode(1440, 900), "Game Window");
 	while (window.isOpen()) {
 		Event event;
 		while (window.pollEvent(event)) {
@@ -157,11 +157,11 @@ int main()
 						Playing = true;
 						switch (skin) {
 						case 1:
-							player.setPosition(346.5, 835);
+							player.setPosition(720, 826);
 						case 2:
-							player.setPosition(346.5, 830);
+							player.setPosition(720, 821);
 						case 3:
-							player.setPosition(346.5, 835);
+							player.setPosition(720, 826);
 						}
 					}
 				}
@@ -240,17 +240,17 @@ int main()
 			window.display();
 		}
 
-		if (PlayerRight and player.getPosition().x < 585 and skin != 3) {
-			player.setPosition((player.getPosition().x + .25), (player.getPosition().y));
+		if (PlayerRight and player.getPosition().x < 1332 and skin != 3) {
+			player.setPosition((player.getPosition().x + .35), (player.getPosition().y));
 		}
 		if (PlayerLeft and player.getPosition().x > 50 and skin != 3) {
-			player.setPosition((player.getPosition().x - .25), (player.getPosition().y));
+			player.setPosition((player.getPosition().x - .35), (player.getPosition().y));
 		}
-		if (PlayerRight and player.getPosition().x < 535 and skin == 3) {
-			player.setPosition((player.getPosition().x + .25), (player.getPosition().y));
+		if (PlayerRight and player.getPosition().x < 1282 and skin == 3) {
+			player.setPosition((player.getPosition().x + .35), (player.getPosition().y));
 		}
 		if (PlayerLeft and player.getPosition().x > 15 and skin == 3) {
-			player.setPosition((player.getPosition().x - .25), (player.getPosition().y));
+			player.setPosition((player.getPosition().x - .35), (player.getPosition().y));
 		}
 
 		if (Shooting) {
@@ -348,16 +348,23 @@ int main()
 
 		for (PlayerBullet &p : projectileVector) {
 			p.MoveBullet();
-		}
+			//for (int i = 0; i < rangerVector.size(); i++) {
+				//if (projectileVector[j].bullet.getGlobalBounds().contains(rangerVector[i].ranger.getGlobalBounds)) {
+				//	projectileVector.erase(projectileVector.begin() + j);
+				//	rangerVector[i].Hit();
+				}
+
+			//}
+		//}
 		
 		for (int i = 0; i < projectileVector.size(); i++) {
-			if (projectileVector[i].bullet.getPosition().y < -16) {
+			if (projectileVector[i].bullet.getPosition().y < 75) {
 				projectileVector.erase(projectileVector.begin() + i);
 			}
 		}
 		if (EnemySpawn) {
 			if (enemy.getElapsedTime().asSeconds() >= 1) {
-				Ranger ranger(Vector2f((rangerx() % 450), 0));
+				Ranger ranger(Vector2f((rangerx() %543) + 75, 0));
 				rangerVector.push_back(ranger);
 				enemy.restart();
 			}
