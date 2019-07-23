@@ -265,7 +265,7 @@ int main()
 				}
 				else if ((clock.getElapsedTime().asSeconds() >= .075 and ShotSkin == false)) {
 					ShotSkin = true;
-					PlayerBullet projectile(Vector2f(player.getPosition().x + 28, player.getPosition().y - 80), skin);
+					PlayerBullet projectile(Vector2f(player.getPosition().x + 29.5, player.getPosition().y - 80), skin);
 					projectileVector.push_back(projectile);
 					clock.restart();
 				}
@@ -352,9 +352,8 @@ int main()
 		for (PlayerBullet &p : projectileVector) {
 			p.MoveBullet();
 			for (int i = 0; i < rangerVector.size(); i++) {
-				if (rangerVector[i].ranger.getGlobalBounds().contains(p.bullet.getPosition())) {
+				if ((rangerVector[i].ranger.getPosition().x - 28.5) < p.bullet.getPosition().x < rangerVector[i].ranger.getPosition().x + 28.5) && (rangerVector[i].ranger.getPosition().y - 30) < p.bullet.getPosition().y < rangerVector[i].ranger.getPosition().y + 30)) {
 					cout << "yeet" << endl;
-					
 
 					//projectileVector.erase(projectileVector.begin() + j);
 					//rangerVector[i].Hit();
