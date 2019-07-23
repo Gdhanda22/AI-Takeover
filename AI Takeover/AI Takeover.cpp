@@ -86,6 +86,10 @@ int main()
 	top.setPosition(-63, -360);
 	top.setScale(9, 9);
 
+	Music music; 
+	music.openFromFile("GameMusic.wav");
+	music.play();
+	music.setLoop(true);
 
 	//Pounder Stuff
 	sf::Sprite pounder;

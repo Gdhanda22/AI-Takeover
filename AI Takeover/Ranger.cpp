@@ -5,7 +5,6 @@
 Ranger::Ranger(Vector2f pos)
 {
 	rangerSkin = new Texture();
-
 	rangerSkin->loadFromFile("");
 	ranger.setTexture(*rangerSkin);
 	ranger.setPosition(pos);
@@ -14,13 +13,13 @@ Ranger::Ranger(Vector2f pos)
 }
 
 
-Ranger::moveRanger()
+void Ranger::moveRanger()
 {
 	if (ranger.getPosition().y < 300) {
 
 		if (rangerSpeed.getElapsedTime().asSeconds() >= .01) {
-			bullet.setPosition(bullet.getPosition().x, bullet.getPosition().y + 1);
-			bulletmover.restart();
+			ranger.setPosition(ranger.getPosition().x, ranger.getPosition().y + 1);
+			rangerSpeed.restart();
 		}
 	}
 }

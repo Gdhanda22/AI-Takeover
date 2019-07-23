@@ -18,9 +18,9 @@ using namespace sf;
 class Ranger
 {
 public:
-	Ranger(Vector2f,);
+	Ranger(Vector2f);
 	Texture* rangerSkin;
-	Sprit ranger;
+	Sprite ranger;
 	Clock rangerSpeed;
 	void moveRanger();
 };
