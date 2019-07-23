@@ -41,7 +41,7 @@ PlayerBullet::~PlayerBullet() {
 
 void PlayerBullet::MoveBullet() {
 	
-	if (bullet.getPosition().y >50) {
+	if (bullet.getPosition().y > 0) {
 
 		if (bulletmover.getElapsedTime().asSeconds() >= .00075) {
 			bullet.setPosition(bullet.getPosition().x, bullet.getPosition().y - 2);

@@ -131,9 +131,10 @@ int main()
 	bool ShotSkin = false;
 	bool NameSize = false;
 	bool Yeeter = false;
-	bool EnemySpawn = false;
+	bool EnemySpawn = true;
 	bool slow = false;
 	double speed = .45;
+	double rangertime = 5;
 	int arrow = 3;
 
 	RenderWindow window(VideoMode(1440, 900), "Game Window");
@@ -180,9 +181,6 @@ int main()
 				if (event.key.code == Keyboard::Space) {
 					Shooting = true;
 				}
-				if (event.key.code == Keyboard::E) {
-					EnemySpawn = true;
-				}
 			}
 			if (event.type == Event::KeyReleased) {
 				if (event.key.code == Keyboard::D) {
@@ -205,9 +203,6 @@ int main()
 						break;
 					}
 					
-				}
-				if (event.key.code == Keyboard::E) {
-					EnemySpawn = false;
 				}
 			}
 			if (event.type == Event::Closed) {
@@ -352,23 +347,20 @@ int main()
 		for (PlayerBullet &p : projectileVector) {
 			p.MoveBullet();
 			for (int i = 0; i < rangerVector.size(); i++) {
-				if ((rangerVector[i].ranger.getPosition().x - 28.5) < p.bullet.getPosition().x < rangerVector[i].ranger.getPosition().x + 28.5) && (rangerVector[i].ranger.getPosition().y - 30) < p.bullet.getPosition().y < rangerVector[i].ranger.getPosition().y + 30)) {
-					cout << "yeet" << endl;
-
-					//projectileVector.erase(projectileVector.begin() + j);
-					//rangerVector[i].Hit();
+				if (rangerVector[i].ranger.getGlobalBounds().contains(p.bullet.getPosition())) {
+				cout << "yeet" << endl;
 				}
-
 			}
 		}
 		
 		for (int i = 0; i < projectileVector.size(); i++) {
 			if (projectileVector[i].bullet.getPosition().y < 75) {
+				delete projectileVector[i].bulletskin;
 				projectileVector.erase(projectileVector.begin() + i);
 			}
 		}
 		if (EnemySpawn) {
-			if (enemy.getElapsedTime().asSeconds() >= 1) {
+			if (enemy.getElapsedTime().asSeconds() >= rangertime) {
 				Ranger ranger(Vector2f((rangerx() %1290) + 75, 0));
 				rangerVector.push_back(ranger);
 				enemy.restart();
@@ -376,10 +368,10 @@ int main()
 		}
 
 		if (slow) {
-			speed = .25;
+			speed = .3;
 		}
 		else if (!slow) {
-			speed = .55;
+			speed = .6;
 		}
 
 		for (Ranger &p : rangerVector) {

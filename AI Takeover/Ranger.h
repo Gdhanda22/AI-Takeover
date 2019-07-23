@@ -20,8 +20,11 @@ class Ranger
 public:
 	Ranger(Vector2f);
 	Texture* rangerSkin;
+	Texture* rangerSkin2;
 	Sprite ranger;
 	Clock rangerSpeed;
+	Clock skinclock;
 	void moveRanger();
+	bool skin;
 };
 
