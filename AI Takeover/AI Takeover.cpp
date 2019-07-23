@@ -32,6 +32,8 @@ int main()
 	int shootingskinstuff;
 	shootingskinstuff = 1;
 
+	int playerDamage = 50;
+
 	// Skin Selection 
 	Sprite fakeNiv;
 	Texture fullarrow;
@@ -118,6 +120,8 @@ int main()
 	// Ranger Spawning Timers and Stuff
 	Clock decreasetime;
 	double decreasethedecrease = 0;
+	Clock rangerHealthBoost;
+	int rangerHealth = 200;
 
 	// Shooting Stuff
 	Clock clock;
@@ -352,7 +356,10 @@ int main()
 			p.MoveBullet();
 			for (int i = 0; i < rangerVector.size(); i++) {
 				if (rangerVector[i].ranger.getGlobalBounds().contains(p.bullet.getPosition())) {
-				//bullet explodes and ranger runs hit function or something
+					rangerVector[i].gotHitRip(playerDamage);
+					if (rangerVector.[i].rangerHP <= 0) {
+						rangerVector.erase(rangerVector.begin() + i);
+					}
 				}
 			}
 		}
@@ -365,7 +372,7 @@ int main()
 		}
 		if (EnemySpawn) {
 			if (enemy.getElapsedTime().asSeconds() >= rangertime) {
-				Ranger ranger(Vector2f((rangerx() %1290) + 75, 0));
+				Ranger ranger(Vector2f((rangerx() %1290) + 75, 0), rangerHealth);
 				rangerVector.push_back(ranger);
 				enemy.restart();
 			}
@@ -375,7 +382,10 @@ int main()
 			rangertime -= .05;
 			decreasetime.restart();
 		}
-
+		if (rangerHealthBoost.getElapsedTime().asSeconds() >= 40) {
+			rangerHealth += 20;
+			rangerHealthBoost.restart();
+		}
 
 		if (slow) {
 			speed = .3;

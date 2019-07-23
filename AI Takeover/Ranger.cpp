@@ -2,7 +2,7 @@
 #include "Ranger.h"
 
 
-Ranger::Ranger(Vector2f pos)
+Ranger::Ranger(Vector2f pos, int health)
 {
 	rangerSkin = new Texture();
 	rangerSkin->loadFromFile("Ranger1.png");
@@ -12,6 +12,8 @@ Ranger::Ranger(Vector2f pos)
 	ranger.setPosition(pos);
 	ranger.setOrigin(50, 50);
 	ranger.setScale(1.5, 1.5);
+
+	rangerHP = health;
 
 }
 
@@ -41,3 +43,8 @@ void Ranger::moveRanger()
 	}
 }
 
+void Ranger::gotHitRip(int damage)
+{
+	rangerHP -= damage;
+
+}
