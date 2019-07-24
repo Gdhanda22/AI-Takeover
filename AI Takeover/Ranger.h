@@ -1,7 +1,6 @@
 #pragma once
 #include "pch.h"
 #include "Pounder.h"
-#include "Ranger.h"
 #include "RangerBullet.h"
 #include "PlayerBullet.h"
 #include <iostream>
@@ -28,5 +27,7 @@ public:
 	void moveRanger();
 	bool skin;
 	void gotHitRip(int);
+	Clock shotclock;
+	vector<RangerBullet> rangerbulletVector;
 };
 

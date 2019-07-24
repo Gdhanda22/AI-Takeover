@@ -1,6 +1,5 @@
 #pragma once
 #include "pch.h"
-#include "Pounder.h"
 #include "Ranger.h"
 #include "RangerBullet.h"
 #include "PlayerBullet.h"
@@ -18,8 +17,6 @@ class Pounder
 {
 public:
 	Pounder();
-	sf::Sprite pounder;
-	sf::Texture pounderskin;
-	random_device PounderLocation;
+	~Pounder();
 };
 

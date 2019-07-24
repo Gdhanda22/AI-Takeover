@@ -87,6 +87,12 @@ int main()
 	top.setTexture(topskin);
 	top.setPosition(0, 0);
 	top.setScale(9, 9);
+	Sprite wall;
+	Texture wally;
+	wally.loadFromFile("blackboi.png");
+	wall.setTexture(wally);
+	wall.setPosition(0, 783);
+	wall.setScale(9, 9);
 
 	Music music; 
 	music.openFromFile("GameMusic.wav");
@@ -108,20 +114,20 @@ int main()
 	name.setTexture(nameskin);
 	name.setOrigin(50, 50);
 	name.setScale(6.5, 6.5);
-	name.setPosition(720, 263.55);
+	name.setPosition(720,250);
 	Sprite start;
 	Texture startbutton;
 	startbutton.loadFromFile("start.png");
 	start.setTexture(startbutton);
 	start.setPosition(720, 450);
-	start.setScale(6.6969696969, 6.6969696969);
-	start.setOrigin(50, 50);
+	start.setScale(5.95, 5.95);
+	start.setOrigin(28.5, 13.5);
 
 	// Ranger Spawning Timers and Stuff
 	Clock decreasetime;
 	double decreasethedecrease = 0;
 	Clock rangerHealthBoost;
-	int rangerHealth = 200;
+	int rangerHealth = 350;
 
 	// Shooting Stuff
 	Clock clock;
@@ -130,6 +136,8 @@ int main()
 	vector<PlayerBullet> projectileVector;
 	vector<Ranger> rangerVector;
 	random_device rangerx;
+	int bulletToKill;
+	bool killBullet = false;
 
 	// Movement
 	bool PlayerLeft = false;
@@ -142,7 +150,7 @@ int main()
 	bool EnemySpawn = true;
 	bool slow = false;
 	double speed = .45;
-	double rangertime = 5;
+	double rangertime = 4;
 	int arrow = 3;
 
 	RenderWindow window(VideoMode(1440, 900), "Game Window");
@@ -221,6 +229,7 @@ int main()
 		if (Playing) {
 
 			window.clear();
+			window.draw(wall);
 			window.draw(background);
 			window.draw(player);
 			for (PlayerBullet p : projectileVector) {
@@ -352,16 +361,23 @@ int main()
 			player.setTexture(yeet);
 		}
 
-		for (PlayerBullet &p : projectileVector) {
-			p.MoveBullet();
+		for (int j = 0; j < projectileVector.size(); j++) {
+			projectileVector[j].MoveBullet();
 			for (int i = 0; i < rangerVector.size(); i++) {
-				if (rangerVector[i].ranger.getGlobalBounds().contains(p.bullet.getPosition())) {
+				if (rangerVector[i].ranger.getGlobalBounds().contains(projectileVector[j].bullet.getPosition())) {
 					rangerVector[i].gotHitRip(playerDamage);
-					if (rangerVector.[i].rangerHP <= 0) {
+					bulletToKill = j;
+					killBullet = true;
+					if (rangerVector[i].rangerHP <= 0) {
 						rangerVector.erase(rangerVector.begin() + i);
 					}
 				}
 			}
+		}
+
+		if (killBullet) {
+			projectileVector.erase(projectileVector.begin() + bulletToKill);
+			killBullet = false;
 		}
 		
 		for (int i = 0; i < projectileVector.size(); i++) {
@@ -370,7 +386,7 @@ int main()
 				projectileVector.erase(projectileVector.begin() + i);
 			}
 		}
-		if (EnemySpawn) {
+		if (EnemySpawn and Playing) {
 			if (enemy.getElapsedTime().asSeconds() >= rangertime) {
 				Ranger ranger(Vector2f((rangerx() %1290) + 75, 0), rangerHealth);
 				rangerVector.push_back(ranger);
@@ -393,9 +409,9 @@ int main()
 		else if (!slow) {
 			speed = .6;
 		}
-
 		for (Ranger &p : rangerVector) {
 			p.moveRanger();
+			//p.shootRanger();
 		}
 	}
 }

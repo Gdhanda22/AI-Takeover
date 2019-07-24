@@ -1,17 +1,5 @@
 #include "pch.h"
-#include "Pounder.h"
-#include "Ranger.h"
-#include "RangerBullet.h"
 #include "PlayerBullet.h"
-#include <iostream>
-#include <string>
-#include <random>
-#include <fstream>
-#include <vector>
-#include <SFML/Graphics.hpp>
-#include <Windows.h>
-using namespace std;
-using namespace sf;
 
 
 PlayerBullet::PlayerBullet(Vector2f pos, int skin) {
@@ -32,11 +20,7 @@ PlayerBullet::PlayerBullet(Vector2f pos, int skin) {
 	
 	bullet.setTexture(*bulletskin);
 	bullet.setPosition(pos);
-	bullet.setOrigin(16, 16);
-}
-
-PlayerBullet::~PlayerBullet() {
-	//delete(bulletskin);
+	bullet.setOrigin(16, 32);
 }
 
 void PlayerBullet::MoveBullet() {
@@ -44,7 +28,7 @@ void PlayerBullet::MoveBullet() {
 	if (bullet.getPosition().y > 0) {
 
 		if (bulletmover.getElapsedTime().asSeconds() >= .00075) {
-			bullet.setPosition(bullet.getPosition().x, bullet.getPosition().y - 2);
+			bullet.setPosition(bullet.getPosition().x, bullet.getPosition().y - 3);
 			bulletmover.restart();
 		}
 	}

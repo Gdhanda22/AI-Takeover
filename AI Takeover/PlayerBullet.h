@@ -3,7 +3,6 @@
 #include "Pounder.h"
 #include "Ranger.h"
 #include "RangerBullet.h"
-#include "PlayerBullet.h"
 #include <iostream>
 #include <string>
 #include <random>
@@ -19,7 +18,6 @@ class PlayerBullet
 {
 public:
 	PlayerBullet(Vector2f, int);
-	~PlayerBullet();
 	Texture* bulletskin;
 	Sprite bullet;
 	Clock bulletmover;
