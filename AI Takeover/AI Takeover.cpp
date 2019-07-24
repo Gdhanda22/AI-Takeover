@@ -87,12 +87,6 @@ int main()
 	top.setTexture(topskin);
 	top.setPosition(0, 0);
 	top.setScale(9, 9);
-	Sprite wall;
-	Texture wally;
-	wally.loadFromFile("blackboi.png");
-	wall.setTexture(wally);
-	wall.setPosition(0, 783);
-	wall.setScale(9, 9);
 
 	Music music; 
 	music.openFromFile("GameMusic.wav");
@@ -128,6 +122,55 @@ int main()
 	double decreasethedecrease = 0;
 	Clock rangerHealthBoost;
 	int rangerHealth = 350;
+	vector<RangerBullet> rangerbulletVector;
+
+	// Score Stuff
+	int score = 0;
+	Text scoretext;
+	Font font;
+	font.loadFromFile("foont.ttf");
+	scoretext.setFont(font);
+	scoretext.setScale(1.3, 1.3);
+	scoretext.setPosition(510, 26);
+	scoretext.setFillColor(Color(80, 80, 80));
+	Clock scorepersecond;
+	Clock increasesps;
+	int sps = 5;
+	int scoreperranger = 50;
+
+	// Tower Health Stuff
+	Sprite heart;
+	Texture heartSkin;
+	heartSkin.loadFromFile("Heart.png");
+	heart.setTexture(heartSkin);
+	heart.setOrigin(17, 16.5);
+	heart.setScale(1, 1);
+	heart.setPosition(115, 48.5);
+	int towerHealth = 10000;
+	Text health;
+	health.setFont(font);
+	health.setFillColor(Color(80, 80, 80));
+	health.setScale(1.3, 1.3);
+	health.setPosition(140, 26);
+	health.setString(to_string(towerHealth));
+
+	//Money Stuff
+	int money = 500;
+	Text moneytext;
+	moneytext.setFont(font);
+	moneytext.setFillColor(Color(80, 80, 80));
+	moneytext.setScale(1.3, 1.3);
+	moneytext.setPosition(365, 26);
+	moneytext.setString(to_string(money));
+	int moneyperranger = 25;
+	Sprite dollar;
+	Texture dollarSkin;
+	dollarSkin.loadFromFile("dollar.png");
+	dollar.setTexture(dollarSkin);
+	dollar.setOrigin(15.5, 15.5);
+	dollar.setScale(1.4, 1.4);
+	dollar.setPosition(335, 48.5);
+
 
 	// Shooting Stuff
 	Clock clock;
@@ -139,7 +182,29 @@ int main()
 	int bulletToKill;
 	bool killBullet = false;
 
-	// Movement
+	int rangerDamage = 40;
+
+
+
+
+	// Upgrade Buttons
+	Sprite repairbuttonSprite;
+	Texture repairbuttonTexture;
+	Sprite attackbuttonSprite;
+	Texture attackbuttonTexture;
+	repairbuttonTexture.loadFromFile("RepairWall.png");
+	attackbuttonTexture.loadFromFile("AttackBoost.png");
+	repairbuttonSprite.setTexture(repairbuttonTexture);
+	attackbuttonSprite.setTexture(attackbuttonTexture);
+	repairbuttonSprite.setScale(2, 2);
+	attackbuttonSprite.setScale(2, 2);
+	repairbuttonSprite.setPosition(1100, 26);
+	attackbuttonSprite.setPosition(1300, 26);
+
+
+
+
+	// Movement and other stuuf
 	bool PlayerLeft = false;
 	bool PlayerRight = false;
 	bool Shooting = false;
@@ -172,6 +237,7 @@ int main()
 						player.setTexture(throwerDel);
 					}
 					if (start.getGlobalBounds().contains((Vector2f)Mouse::getPosition(window))) {
+						scorepersecond.restart();
 						Playing = true;
 						switch (skin) {
 						case 1:
@@ -208,7 +274,7 @@ int main()
 				if (event.key.code == Keyboard::Space) {
 					Shooting = false;
 					switch (skin) {
-					case 1: 
+					case 1:
 						player.setTexture(playerskin);
 						break;
 					case 2:
@@ -218,27 +284,47 @@ int main()
 						player.setTexture(throwerDel);
 						break;
 					}
-					
+
 				}
 			}
 			if (event.type == Event::Closed) {
 				window.close();
 			}
 		}
+		if (Playing and scorepersecond.getElapsedTime().asSeconds() > .5) {
+			score += sps;
+			scorepersecond.restart();
+		}
+		if (Playing and increasesps.getElapsedTime().asSeconds() > 120) {
+			sps += 5;
+			increasesps.restart();
+		}
+		scoretext.setString("Score  " + to_string(score));
+		health.setString(to_string(towerHealth));
+		moneytext.setString(to_string(money));
 
 		if (Playing) {
 
 			window.clear();
-			window.draw(wall);
 			window.draw(background);
-			window.draw(player);
 			for (PlayerBullet p : projectileVector) {
 				window.draw(p.bullet);
 			}
-			for (Ranger p :rangerVector) {
+			for (RangerBullet p : rangerbulletVector) {
+				window.draw(p.cannonball);
+			}
+			for (Ranger p : rangerVector) {
 				window.draw(p.ranger);
 			}
+			window.draw(player);
 			window.draw(top);
+			window.draw(health);
+			window.draw(heart);
+			window.draw(dollar);
+			window.draw(scoretext);
+			window.draw(moneytext);
+			window.draw(repairbuttonSprite);
+			window.draw(attackbuttonSprite);
 			window.draw(border);
 			window.display();
 		}
@@ -271,13 +357,13 @@ int main()
 			switch (skin) {
 			case 1:
 				player.setTexture(playershoot);
-				if ((clock.getElapsedTime().asSeconds() >= .075 and ShotSkin == true)) {
+				if ((clock.getElapsedTime().asSeconds() >= .1 and ShotSkin == true)) {
 					ShotSkin = false;
 					clock.restart();
 				}
-				else if ((clock.getElapsedTime().asSeconds() >= .075 and ShotSkin == false)) {
+				else if ((clock.getElapsedTime().asSeconds() >= .1 and ShotSkin == false)) {
 					ShotSkin = true;
-					PlayerBullet projectile(Vector2f(player.getPosition().x + 29.5, player.getPosition().y - 80), skin);
+					PlayerBullet projectile(Vector2f(player.getPosition().x + 30, player.getPosition().y - 75), skin);
 					projectileVector.push_back(projectile);
 					clock.restart();
 				}
@@ -288,26 +374,26 @@ int main()
 					arrow = 2;
 					clock.restart();
 				}
-				else if ((clock.getElapsedTime().asSeconds() >= .065 and arrow == 2)) {
+				else if ((clock.getElapsedTime().asSeconds() >= .0666 and arrow == 2)) {
 					arrow = 3;
 					clock.restart();
 				}
-				else if ((clock.getElapsedTime().asSeconds() >= .065 and arrow == 3)) {
+				else if ((clock.getElapsedTime().asSeconds() >= .0666 and arrow == 3)) {
 					arrow = 1;
-					PlayerBullet projectile(Vector2f(player.getPosition().x + 30, player.getPosition().y - 72), skin);
+					PlayerBullet projectile(Vector2f(player.getPosition().x + 42, player.getPosition().y - 55), skin);
 					projectileVector.push_back(projectile);
 					clock.restart();
 				}
 				break;
 			case 3:
 				player.setTexture(throwerDel);
-				if ((clock.getElapsedTime().asSeconds() >= .075 and Yeeter == true)) {
+				if ((clock.getElapsedTime().asSeconds() >= .1 and Yeeter == true)) {
 					Yeeter = false;
 					PlayerBullet projectile(Vector2f(player.getPosition().x + 75, player.getPosition().y - 20), skin);
 					projectileVector.push_back(projectile);
 					clock.restart();
 				}
-				else if ((clock.getElapsedTime().asSeconds() >= .075 and Yeeter == false)) {
+				else if ((clock.getElapsedTime().asSeconds() >= .1 and Yeeter == false)) {
 					Yeeter = true;
 					clock.restart();
 				}
@@ -370,6 +456,8 @@ int main()
 					killBullet = true;
 					if (rangerVector[i].rangerHP <= 0) {
 						rangerVector.erase(rangerVector.begin() + i);
+						score += scoreperranger;
+						money += moneyperranger;
 					}
 				}
 			}
@@ -379,7 +467,7 @@ int main()
 			projectileVector.erase(projectileVector.begin() + bulletToKill);
 			killBullet = false;
 		}
-		
+
 		for (int i = 0; i < projectileVector.size(); i++) {
 			if (projectileVector[i].bullet.getPosition().y < 75) {
 				delete projectileVector[i].bulletskin;
@@ -388,7 +476,7 @@ int main()
 		}
 		if (EnemySpawn and Playing) {
 			if (enemy.getElapsedTime().asSeconds() >= rangertime) {
-				Ranger ranger(Vector2f((rangerx() %1290) + 75, 0), rangerHealth);
+				Ranger ranger(Vector2f((rangerx() % 1290) + 75, 0), rangerHealth);
 				rangerVector.push_back(ranger);
 				enemy.restart();
 			}
@@ -407,11 +495,46 @@ int main()
 			speed = .3;
 		}
 		else if (!slow) {
-			speed = .6;
+			speed = .7;
 		}
 		for (Ranger &p : rangerVector) {
 			p.moveRanger();
-			//p.shootRanger();
+			if (p.ranger.getPosition().y >= 373) {
+				if (p.shotclock.getElapsedTime().asSeconds() >= 1.5) {
+					RangerBullet cannonball(Vector2f(p.ranger.getPosition().x, p.ranger.getPosition().y + 30));
+					rangerbulletVector.push_back(cannonball);
+					p.shotclock.restart();
+				}
+			}
+		}
+		for (RangerBullet &p : rangerbulletVector) {
+			p.MoveCannonball();
+		}
+		for (int i = 0; i < rangerbulletVector.size(); i++) {
+			if (rangerbulletVector[i].cannonball.getPosition().y >= 783) {
+				if (rangerbulletVector[i].cannonballtexture == 1) {
+					rangerbulletVector[i].Wait();
+					rangerbulletVector[i].explosionclock.restart();
+					towerHealth -= rangerDamage;
+				}
+				else if (rangerbulletVector[i].cannonballtexture == 2 and rangerbulletVector[i].explosionclock.getElapsedTime().asSeconds() > .075) {
+					delete rangerbulletVector[i].cannonballskin;
+					delete rangerbulletVector[i].explosion;
+					rangerbulletVector.erase(rangerbulletVector.begin() + i);
+				}
+			}
+		}
+		if (towerHealth > 20000) {
+			towerHealth = 20000;
+		}
+		if (towerHealth < 0) {
+			towerHealth = 0;
+		}
+		if (money > 2500) {
+			money = 2500;
+		}
+		if (money < 0) {
+			money = 0;
 		}
 	}
 }

@@ -26,11 +26,11 @@ void Ranger::moveRanger()
 			ranger.setPosition(ranger.getPosition().x, ranger.getPosition().y + 1.25);
 			rangerSpeed.restart();
 		}
-		if (skinclock.getElapsedTime().asSeconds() >= .2 and skin == true) {
+		if (skinclock.getElapsedTime().asSeconds() >= .15 and skin == true) {
 			skin = false;
 			skinclock.restart();
 		}
-		else if (skinclock.getElapsedTime().asSeconds() >= .2 and skin == false) {
+		else if (skinclock.getElapsedTime().asSeconds() >= .15 and skin == false) {
 			skin = true;
 			skinclock.restart();
 		}
@@ -39,13 +39,6 @@ void Ranger::moveRanger()
 		}
 		else if (!skin) {
 			ranger.setTexture(*rangerSkin2);
-		}
-	}
-	else {
-		if (shotclock.getElapsedTime().asSeconds() >= 1.5) {
-			RangerBullet ranger(Vector2f(ranger.getPosition().x, ranger.getPosition().y + 20));
-			rangerbulletVector.push_back(ranger);
-			shotclock.restart;
 		}
 	}
 }
