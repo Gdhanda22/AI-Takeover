@@ -19,9 +19,9 @@ Pounder::Pounder(Vector2f pos, int health)
 	puff6 = new Texture();
 	puff6->loadFromFile("puff6.png");
 	punch1 = new Texture();
-	punch1->loadFromFile("punch1");
+	punch1->loadFromFile("punch1.png");
 	punch2 = new Texture();
-	punch2.loadFromFile("punch2");
+	punch2->loadFromFile("punch2.png");
 
 	pounder.setTexture(*pounderSkin);
 	pounder.setPosition(pos);
@@ -112,6 +112,7 @@ bool Pounder::movePounder()
 			punchSkin = 1;
 			skinClock.restart();
 		}
+		switch (punchSkin) {
 		case 1:
 			pounder.setTexture(*pounderSkin);
 			break;
@@ -124,6 +125,7 @@ bool Pounder::movePounder()
 		case 4:
 			pounder.setTexture(*punch1);
 			break;
+		}
 	}
 	if (punchSkin == 3) {
 		return true;
