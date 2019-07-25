@@ -24,7 +24,7 @@ Pounder::Pounder(Vector2f pos, int health)
 	pounder.setOrigin(32.5, 47.5);
 	pounder.setScale(2.25, 2.25);
 	pounderHP = health;
-	skin = 1
+	skin = 1;
 
 }
 
@@ -37,31 +37,31 @@ void Pounder::movePounder()
 			pounder.setPosition(pounder.getPosition().x, pounder.getPosition().y + .65);
 			pounderSpeed.restart();
 		}
-		if (skinClock.getElapsedTime().asSeconds() >= .1 and skin == 1) {
+		if (skinClock.getElapsedTime().asSeconds() >= .3 and skin == 1) {
 			skin = 2;
 			skinClock.restart();
 		}
-		else if (skinClock.getElapsedTime().asSeconds() >= .05 and skin == 2) {
+		else if (skinClock.getElapsedTime().asSeconds() >= .12 and skin == 2) {
 			skin = 3;
 			skinClock.restart();
 		}
-		else if (skinClock.getElapsedTime().asSeconds() >= .05 and skin == 3) {
+		else if (skinClock.getElapsedTime().asSeconds() >= .12 and skin == 3) {
 			skin = 4;
 			skinClock.restart();
 		}
-		else if (skinClock.getElapsedTime().asSeconds() >= .05 and skin == 4) {
+		else if (skinClock.getElapsedTime().asSeconds() >= .12 and skin == 4) {
 			skin = 5;
 			skinClock.restart();
 		}
-		else if (skinClock.getElapsedTime().asSeconds() >= .05 and skin == 5) {
+		else if (skinClock.getElapsedTime().asSeconds() >= .12 and skin == 5) {
 			skin = 6;
 			skinClock.restart();
 		}
-		else if (skinClock.getElapsedTime().asSeconds() >= .05 and skin == 6) {
+		else if (skinClock.getElapsedTime().asSeconds() >= .12 and skin == 6) {
 			skin = 7;
 			skinClock.restart();
 		}
-		else if (skinClock.getElapsedTime().asSeconds() >= .05 and skin == 7) {
+		else if (skinClock.getElapsedTime().asSeconds() >= .12 and skin == 7) {
 			skin = 1;
 			skinClock.restart();
 		}

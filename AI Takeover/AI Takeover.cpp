@@ -174,7 +174,7 @@ int main()
 	int bulletToKill;
 	bool killBullet = false;
 
-	int rangerDamage = 40;
+	int rangerDamage = 4000;
 
 
 	//Pounder Stuff
@@ -207,9 +207,9 @@ int main()
 	repairbuttonSprite.setScale(1.9, 1.9);
 	attackbuttonSprite.setScale(1.9, 1.9);
 	multiplierSprite.setScale(1.9, 1.9);
-	repairbuttonSprite.setPosition(1135, 17.5);
-	attackbuttonSprite.setPosition(1280, 17.5);
-	multiplierSprite.setPosition(938, 17.5);
+	repairbuttonSprite.setPosition(1135, 20);
+	attackbuttonSprite.setPosition(1280, 20);
+	multiplierSprite.setPosition(938, 20);
 	Clock waittime; 
 	Clock waittime2;
 	Clock waittime3;
@@ -237,7 +237,8 @@ int main()
 	while (window.isOpen()) {
 		Event event;
 		while (window.pollEvent(event)) {
-				if (!Playing) {
+			
+				if (!Playing and ALIVE) {
 					if (event.type == Event::MouseButtonPressed) {
 						if (fakeJux.getGlobalBounds().contains((Vector2f)Mouse::getPosition(window))) {
 							skin = 1;
@@ -306,7 +307,7 @@ int main()
 					window.close();
 				}
 			}
-			if (Playing and scorepersecond.getElapsedTime().asSeconds() > .5) {
+			if (Playing and scorepersecond.getElapsedTime().asSeconds() > .5 and ALIVE) {
 				score += (sps * scoremultiplier);
 				scorepersecond.restart();
 			}
@@ -318,21 +319,21 @@ int main()
 			health.setString(to_string(towerHealth));
 			moneytext.setString(to_string(money));
 
-			if (Playing) {
+			if (Playing and ALIVE) {
 
 				window.clear();
 				window.draw(background);
 				for (PlayerBullet p : projectileVector) {
 					window.draw(p.bullet);
 				}
+				for (Pounder p : pounderVector) {
+					window.draw(p.pounder);
+				}
 				for (RangerBullet p : rangerbulletVector) {
 					window.draw(p.cannonball);
 				}
 				for (Ranger p : rangerVector) {
 					window.draw(p.ranger);
-				}
-				for (Pounder p : pounderVector) {
-					window.draw(p.pounder);
 				}
 				window.draw(player);
 				window.draw(top);
@@ -347,7 +348,7 @@ int main()
 				window.draw(border);
 				window.display();
 			}
-			else {
+			else if (!Playing and ALIVE) {
 				window.clear();
 				window.draw(background);
 				window.draw(start);
@@ -355,6 +356,12 @@ int main()
 				window.draw(fakeNiv);
 				window.draw(fakeJux);
 				window.draw(fakeDel);
+				window.display();
+			}
+			else if (ALIVE == false) {
+				window.clear();
+				window.draw(background);
+				window.draw(scoretext);
 				window.display();
 			}
 
@@ -371,7 +378,7 @@ int main()
 				player.setPosition((player.getPosition().x - speed), (player.getPosition().y));
 			}
 
-			if (Shooting) {
+			if (Shooting and ALIVE) {
 				slow = true;
 				switch (skin) {
 				case 1:
@@ -593,6 +600,10 @@ int main()
 			}
 			for (Pounder &p : pounderVector) {
 				p.movePounder();
+			}
+			if (towerHealth <= 0) {
+				ALIVE = false;
+				towerHealth = 0;
 			}
 		}
 	}
