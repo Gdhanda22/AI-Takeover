@@ -16,7 +16,15 @@ using namespace sf;
 class Pounder
 {
 public:
-	Pounder();
-	~Pounder();
+	Pounder(Vector2f, int);
+	Texture* pounderSkin;
+	Sprite pounder;
+	Clock pounderSpeed;
+	int pounderHP;
+	Clock shotClock;
+	Clock skinClock
+	void movePounder();
+	int skin;
+	void gotHitRip(int);
 };
 

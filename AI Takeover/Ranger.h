@@ -24,7 +24,6 @@ public:
 	Clock rangerSpeed;
 	int rangerHP;
 	Clock skinclock;
-	Clock shotclock;
 	void moveRanger();
 	bool skin;
 	void gotHitRip(int);
