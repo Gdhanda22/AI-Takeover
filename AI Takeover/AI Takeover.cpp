@@ -174,7 +174,7 @@ int main()
 	int bulletToKill;
 	bool killBullet = false;
 
-	int rangerDamage = 4000;
+	int rangerDamage = 40;
 
 
 	//Pounder Stuff
