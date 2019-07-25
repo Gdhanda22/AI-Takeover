@@ -18,6 +18,12 @@ class Pounder
 public:
 	Pounder(Vector2f, int);
 	Texture* pounderSkin;
+	Texture* puff1;
+	Texture* puff2;
+	Texture* puff3;
+	Texture* puff4;
+	Texture* puff5;
+	Texture* puff6;
 	Sprite pounder;
 	Clock pounderSpeed;
 	int pounderHP;
