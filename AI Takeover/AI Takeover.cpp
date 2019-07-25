@@ -34,6 +34,11 @@ int main()
 
 	double playerDamage = 50;
 
+	fstream HighScoreFile;
+	string filename = "Highscore.txt";
+	HighScoreFile.open(filename, ios::in);
+	HighScoreFile << "2000";
+
 	// Skin Selection 
 	Sprite fakeNiv;
 	Texture fullarrow;
@@ -123,7 +128,7 @@ int main()
 	font.loadFromFile("foont.ttf");
 	scoretext.setFont(font);
 	scoretext.setScale(1.3, 1.3);
-	scoretext.setPosition(520, 26);
+	scoretext.setPosition(530, 26);
 	scoretext.setFillColor(Color(80, 80, 80));
 	Clock scorepersecond;
 	Clock increasesps;
@@ -181,12 +186,32 @@ int main()
 	vector<Pounder> pounderVector;
 	Clock pounderspawn;
 	Clock pounderspawnTime;
-	int pounderHealth = 2000;
+	int pounderHealth = 3000;
 	int pounderTime = 25;
 	double decreasePounderDecrease = 0;
+	int pounderDamage = 200;
+	int pounderCoins = 100;
+	int pounderPoints = 350;
+	bool hitTower = false;
 
 
 
+
+	//Game Over
+	Sprite gameovertext;
+	Texture gameovertext2;
+	gameovertext2.loadFromFile("gameover.png");
+	gameovertext.setTexture(gameovertext2);
+	gameovertext.setPosition(720, 250);
+	gameovertext.setOrigin(37, 5);
+	gameovertext.setScale(12, 12);
+	Sprite tint;
+	Texture tintTexture;
+	tintTexture.loadFromFile("tinteez.png");
+	tint.setTexture(tintTexture);
+	tint.setOrigin(16, 16);
+	tint.setPosition(720, 450);
+	tint.setScale(50, 50);
 
 
 
@@ -295,6 +320,7 @@ int main()
 							break;
 						case 2:
 							player.setTexture(fullarrow);
+							player.setPosition(player.getPosition().x, (player.getPosition().y - 10));
 							break;
 						case 3:
 							player.setTexture(throwerDel);
@@ -361,20 +387,44 @@ int main()
 			else if (ALIVE == false) {
 				window.clear();
 				window.draw(background);
+				for (PlayerBullet p : projectileVector) {
+					window.draw(p.bullet);
+				}
+				for (Pounder p : pounderVector) {
+					window.draw(p.pounder);
+				}
+				for (RangerBullet p : rangerbulletVector) {
+					window.draw(p.cannonball);
+				}
+				for (Ranger p : rangerVector) {
+					window.draw(p.ranger);
+				}
+				window.draw(player);
+				window.draw(top);
+				window.draw(health);
+				window.draw(heart);
+				window.draw(dollar);
 				window.draw(scoretext);
+				window.draw(moneytext);
+				window.draw(repairbuttonSprite);
+				window.draw(attackbuttonSprite);
+				window.draw(multiplierSprite);
+				window.draw(border);
+				window.draw(tint);
+				window.draw(gameovertext);
 				window.display();
 			}
 
-			if (PlayerRight and player.getPosition().x < 1332 and skin != 3) {
+			if (PlayerRight and player.getPosition().x < 1332 and skin != 3 and ALIVE) {
 				player.setPosition((player.getPosition().x + speed), (player.getPosition().y));
 			}
-			if (PlayerLeft and player.getPosition().x > 50 and skin != 3) {
+			if (PlayerLeft and player.getPosition().x > 50 and skin != 3 and ALIVE) {
 				player.setPosition((player.getPosition().x - speed), (player.getPosition().y));
 			}
-			if (PlayerRight and player.getPosition().x < 1282 and skin == 3) {
+			if (PlayerRight and player.getPosition().x < 1282 and skin == 3 and ALIVE) {
 				player.setPosition((player.getPosition().x + speed), (player.getPosition().y));
 			}
-			if (PlayerLeft and player.getPosition().x > 15 and skin == 3) {
+			if (PlayerLeft and player.getPosition().x > 15 and skin == 3 and ALIVE) {
 				player.setPosition((player.getPosition().x - speed), (player.getPosition().y));
 			}
 
@@ -383,11 +433,11 @@ int main()
 				switch (skin) {
 				case 1:
 					player.setTexture(playershoot);
-					if ((clock.getElapsedTime().asSeconds() >= .1 and ShotSkin == true)) {
+					if ((clock.getElapsedTime().asSeconds() >= .065 and ShotSkin == true)) {
 						ShotSkin = false;
 						clock.restart();
 					}
-					else if ((clock.getElapsedTime().asSeconds() >= .1 and ShotSkin == false)) {
+					else if ((clock.getElapsedTime().asSeconds() >= .065 and ShotSkin == false)) {
 						ShotSkin = true;
 						PlayerBullet projectile(Vector2f(player.getPosition().x + 30, player.getPosition().y - 75), skin);
 						projectileVector.push_back(projectile);
@@ -396,15 +446,15 @@ int main()
 					break;
 				case 2:
 					player.setTexture(fullarrow);
-					if ((clock.getElapsedTime().asSeconds() >= .065 and arrow == 1)) {
+					if ((clock.getElapsedTime().asSeconds() >= .043 and arrow == 1)) {
 						arrow = 2;
 						clock.restart();
 					}
-					else if ((clock.getElapsedTime().asSeconds() >= .0666 and arrow == 2)) {
+					else if ((clock.getElapsedTime().asSeconds() >= .043 and arrow == 2)) {
 						arrow = 3;
 						clock.restart();
 					}
-					else if ((clock.getElapsedTime().asSeconds() >= .0666 and arrow == 3)) {
+					else if ((clock.getElapsedTime().asSeconds() >= .043 and arrow == 3)) {
 						arrow = 1;
 						PlayerBullet projectile(Vector2f(player.getPosition().x + 42, player.getPosition().y - 55), skin);
 						projectileVector.push_back(projectile);
@@ -413,13 +463,13 @@ int main()
 					break;
 				case 3:
 					player.setTexture(throwerDel);
-					if ((clock.getElapsedTime().asSeconds() >= .1 and Yeeter == true)) {
+					if ((clock.getElapsedTime().asSeconds() >= .065 and Yeeter == true)) {
 						Yeeter = false;
 						PlayerBullet projectile(Vector2f(player.getPosition().x + 75, player.getPosition().y - 20), skin);
 						projectileVector.push_back(projectile);
 						clock.restart();
 					}
-					else if ((clock.getElapsedTime().asSeconds() >= .1 and Yeeter == false)) {
+					else if ((clock.getElapsedTime().asSeconds() >= .065 and Yeeter == false)) {
 						Yeeter = true;
 						clock.restart();
 					}
@@ -487,6 +537,18 @@ int main()
 						}
 					}
 				}
+				for (int r = 0; r < pounderVector.size(); r++) {
+					if (pounderVector[r].pounder.getGlobalBounds().contains(projectileVector[j].bullet.getPosition())) {
+						pounderVector[r].gotYotRip(playerDamage);
+						bulletToKill = j;
+						killBullet = true;
+						if (pounderVector[r].pounderHP <= 0) {
+							pounderVector.erase(pounderVector.begin() + r);
+							score += (pounderPoints * scoremultiplier);
+							money += pounderCoins;
+						}
+					}
+				}
 			}
 
 			if (killBullet) {
@@ -512,7 +574,7 @@ int main()
 					pounderspawn.restart();
 				}
 			}
-			if (decreasetime.getElapsedTime().asSeconds() >= 60 - decreasethedecrease and rangertime > 2) {
+			if (decreasetime.getElapsedTime().asSeconds() >= 60 - decreasethedecrease and rangertime > .5) {
 				decreasethedecrease += .5;
 				rangertime -= .05;
 				decreasetime.restart();
@@ -522,9 +584,13 @@ int main()
 				rangerDamage += 10;
 				moneyperranger += 25;
 				scoreperranger += 50;
+				pounderHealth += 500;
+				pounderDamage += 50;
+				pounderPoints += 350;
+				pounderCoins += 100;
 				rangerHealthBoost.restart();
 			}
-			if (pounderspawnTime.getElapsedTime().asSeconds() >= 60 - decreasethedecrease and pounderTime > 10) {
+			if (pounderspawnTime.getElapsedTime().asSeconds() >= 60 - decreasethedecrease and pounderTime > 5) {
 				decreasePounderDecrease += .5;
 				pounderTime -= .05;
 				pounderspawnTime.restart();
@@ -534,15 +600,17 @@ int main()
 				speed = .3;
 			}
 			else if (!slow) {
-				speed = .7;
+				speed = .8;
 			}
 			for (Ranger &p : rangerVector) {
-				p.moveRanger();
-				if (p.ranger.getPosition().y >= 373) {
-					if (p.shotclock.getElapsedTime().asSeconds() >= 1.5) {
-						RangerBullet cannonball(Vector2f(p.ranger.getPosition().x, p.ranger.getPosition().y + 30));
-						rangerbulletVector.push_back(cannonball);
-						p.shotclock.restart();
+				if (ALIVE) {
+					p.moveRanger();
+					if (p.ranger.getPosition().y >= 373) {
+						if (p.shotclock.getElapsedTime().asSeconds() >= 1.5) {
+							RangerBullet cannonball(Vector2f(p.ranger.getPosition().x, p.ranger.getPosition().y + 30));
+							rangerbulletVector.push_back(cannonball);
+							p.shotclock.restart();
+						}
 					}
 				}
 			}
@@ -575,11 +643,11 @@ int main()
 			if (money < 0) {
 				money = 0;
 			}
-			if (Playing and event.type == Event::MouseButtonPressed) {
+			if (Playing and event.type == Event::MouseButtonPressed and ALIVE) {
 				if (attackbuttonSprite.getGlobalBounds().contains((Vector2f)Mouse::getPosition(window)) and waittime.getElapsedTime().asSeconds() > .25) {
 					if (money >= 500) {
 						money -= 500;
-						playerDamage *= 1.15;
+						playerDamage *= 1.1;
 						waittime.restart();
 					}
 				}
@@ -590,7 +658,7 @@ int main()
 						waittime2.restart();
 					}
 				}
-				if (multiplierSprite.getGlobalBounds().contains((Vector2f)Mouse::getPosition(window)) and waittime2.getElapsedTime().asSeconds() > .25) {
+				if (multiplierSprite.getGlobalBounds().contains((Vector2f)Mouse::getPosition(window)) and waittime3.getElapsedTime().asSeconds() > .25) {
 					if (money >= 1000) {
 						money -= 1000;
 						scoremultiplier += 1;
@@ -599,8 +667,34 @@ int main()
 				}
 			}
 			for (Pounder &p : pounderVector) {
-				p.movePounder();
+				if (ALIVE) {
+					p.movePounder();
+				}
 			}
+
+			for (Pounder &p : pounderVector) {
+				if (p.atLocation == 1) {
+					p.firstDamage.restart();
+					if (p.pounder.getPosition().y >= 716) {
+						p.atLocation = 2;
+					}
+					
+				}
+				if (p.atLocation == 2) {
+					if (p.firstDamage.getElapsedTime().asSeconds() > .15)
+						towerHealth -= pounderDamage;
+					p.firstDamage.restart();
+					p.doDamage.restart();
+					p.atLocation = 3;
+				}
+				if (p.atLocation == 3) {
+					if (p.doDamage.getElapsedTime().asSeconds() > .8) {
+						towerHealth -= pounderDamage;
+						p.doDamage.restart();
+					}
+				}
+			}
+			
 			if (towerHealth <= 0) {
 				ALIVE = false;
 				towerHealth = 0;

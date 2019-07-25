@@ -30,16 +30,17 @@ Pounder::Pounder(Vector2f pos, int health)
 	pounderHP = health;
 	skin = 1;
 	punchSkin = 1;
+	atLocation = 1;
 
 }
 
 
-bool Pounder::movePounder()
+void Pounder::movePounder()
 {
-	if (pounder.getPosition().y < 700) {
+	if (pounder.getPosition().y < 716) {
 
-		if (pounderSpeed.getElapsedTime().asSeconds() >= .0325) {
-			pounder.setPosition(pounder.getPosition().x, pounder.getPosition().y + .65);
+		if (pounderSpeed.getElapsedTime().asSeconds() >= .05) {
+			pounder.setPosition(pounder.getPosition().x, pounder.getPosition().y + 1.4);
 			pounderSpeed.restart();
 		}
 		if (skinClock.getElapsedTime().asSeconds() >= .3 and skin == 1) {
@@ -92,25 +93,29 @@ bool Pounder::movePounder()
 		case 7:
 			pounder.setTexture(*puff6);
 			break;
-
 		}
 	}
 	else {
+
 		if (skinClock.getElapsedTime().asSeconds() >= .2 and punchSkin == 1) {
 			punchSkin = 2;
 			skinClock.restart();
+
 		}
 		else if (skinClock.getElapsedTime().asSeconds() >= .2 and punchSkin == 2) {
 			punchSkin = 3;
 			skinClock.restart();
+
 		}
 		else if (skinClock.getElapsedTime().asSeconds() >= .2 and punchSkin == 3) {
 			punchSkin = 4;
 			skinClock.restart();
+
 		}
 		else if (skinClock.getElapsedTime().asSeconds() >= .2 and punchSkin == 4) {
 			punchSkin = 1;
 			skinClock.restart();
+
 		}
 		switch (punchSkin) {
 		case 1:
@@ -126,12 +131,6 @@ bool Pounder::movePounder()
 			pounder.setTexture(*punch1);
 			break;
 		}
-	}
-	if (punchSkin == 3) {
-		return true;
-	}
-	else {
-		return false;
 	}
 }
 

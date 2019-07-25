@@ -21,7 +21,7 @@ PlayerBullet::PlayerBullet(Vector2f pos, int skin) {
 	
 	bullet.setTexture(*bulletskin);
 	bullet.setPosition(pos);
-	bullet.setOrigin(16, 32);
+	bullet.setOrigin(16, 28);
 }
 
 void PlayerBullet::MoveBullet() {

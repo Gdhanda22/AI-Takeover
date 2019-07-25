@@ -31,9 +31,14 @@ public:
 	int pounderHP;
 	Clock shotClock;
 	Clock skinClock;
-	bool movePounder();
+	void movePounder();
 	int skin;
 	int punchSkin;
 	void gotYotRip(int);
+	Clock punchClock;
+	int atLocation;
+	Clock doDamage;
+	Clock firstDamage;
+	void die();
 };
 
