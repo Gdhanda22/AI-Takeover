@@ -24,13 +24,16 @@ public:
 	Texture* puff4;
 	Texture* puff5;
 	Texture* puff6;
+	Texture* punch1;
+	Texture* punch2;
 	Sprite pounder;
 	Clock pounderSpeed;
 	int pounderHP;
 	Clock shotClock;
 	Clock skinClock;
-	void movePounder();
+	bool movePounder();
 	int skin;
+	int punchSkin;
 	void gotYotRip(int);
 };
 

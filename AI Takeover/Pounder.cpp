@@ -18,6 +18,10 @@ Pounder::Pounder(Vector2f pos, int health)
 	puff5->loadFromFile("puff5.png");
 	puff6 = new Texture();
 	puff6->loadFromFile("puff6.png");
+	punch1 = new Texture();
+	punch1->loadFromFile("punch1");
+	punch2 = new Texture();
+	punch2.loadFromFile("punch2");
 
 	pounder.setTexture(*pounderSkin);
 	pounder.setPosition(pos);
@@ -25,11 +29,12 @@ Pounder::Pounder(Vector2f pos, int health)
 	pounder.setScale(2.25, 2.25);
 	pounderHP = health;
 	skin = 1;
+	punchSkin = 1;
 
 }
 
 
-void Pounder::movePounder()
+bool Pounder::movePounder()
 {
 	if (pounder.getPosition().y < 700) {
 
@@ -89,6 +94,42 @@ void Pounder::movePounder()
 			break;
 
 		}
+	}
+	else {
+		if (skinClock.getElapsedTime().asSeconds() >= .2 and punchSkin == 1) {
+			punchSkin = 2;
+			skinClock.restart();
+		}
+		else if (skinClock.getElapsedTime().asSeconds() >= .2 and punchSkin == 2) {
+			punchSkin = 3;
+			skinClock.restart();
+		}
+		else if (skinClock.getElapsedTime().asSeconds() >= .2 and punchSkin == 3) {
+			punchSkin = 4;
+			skinClock.restart();
+		}
+		else if (skinClock.getElapsedTime().asSeconds() >= .2 and punchSkin == 4) {
+			punchSkin = 1;
+			skinClock.restart();
+		}
+		case 1:
+			pounder.setTexture(*pounderSkin);
+			break;
+		case 2:
+			pounder.setTexture(*punch1);
+			break;
+		case 3:
+			pounder.setTexture(*punch2);
+			break;
+		case 4:
+			pounder.setTexture(*punch1);
+			break;
+	}
+	if (punchSkin == 3) {
+		return true;
+	}
+	else {
+		return false;
 	}
 }
 
