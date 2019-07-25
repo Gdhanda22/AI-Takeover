@@ -32,7 +32,7 @@ int main()
 	int shootingskinstuff;
 	shootingskinstuff = 1;
 
-	int playerDamage = 50;
+	double playerDamage = 50;
 
 	// Skin Selection 
 	Sprite fakeNiv;
@@ -131,7 +131,7 @@ int main()
 	font.loadFromFile("foont.ttf");
 	scoretext.setFont(font);
 	scoretext.setScale(1.3, 1.3);
-	scoretext.setPosition(510, 26);
+	scoretext.setPosition(520, 26);
 	scoretext.setFillColor(Color(80, 80, 80));
 	Clock scorepersecond;
 	Clock increasesps;
@@ -155,7 +155,7 @@ int main()
 	health.setString(to_string(towerHealth));
 
 	//Money Stuff
-	int money = 500;
+	int money = 250;
 	Text moneytext;
 	moneytext.setFont(font);
 	moneytext.setFillColor(Color(80, 80, 80));
@@ -192,14 +192,24 @@ int main()
 	Texture repairbuttonTexture;
 	Sprite attackbuttonSprite;
 	Texture attackbuttonTexture;
+	Sprite multiplierSprite;
+	Texture multiplierTexture;
 	repairbuttonTexture.loadFromFile("RepairWall.png");
 	attackbuttonTexture.loadFromFile("AttackBoost.png");
+	multiplierTexture.loadFromFile("multiplier.png");
 	repairbuttonSprite.setTexture(repairbuttonTexture);
 	attackbuttonSprite.setTexture(attackbuttonTexture);
-	repairbuttonSprite.setScale(2, 2);
-	attackbuttonSprite.setScale(2, 2);
-	repairbuttonSprite.setPosition(1100, 26);
-	attackbuttonSprite.setPosition(1300, 26);
+	multiplierSprite.setTexture(multiplierTexture);
+	repairbuttonSprite.setScale(1.8, 1.8);
+	attackbuttonSprite.setScale(1.8, 1.8);
+	multiplierSprite.setScale(1.9, 1.9);
+	repairbuttonSprite.setPosition(1135, 17.5);
+	attackbuttonSprite.setPosition(1280, 17.5);
+	multiplierSprite.setPosition(938, 17.5);
+	Clock waittime; 
+	Clock waittime2;
+	Clock waittime3;
+	int scoremultiplier = 1;
 
 
 
@@ -217,6 +227,7 @@ int main()
 	double speed = .45;
 	double rangertime = 4;
 	int arrow = 3;
+	bool ALIVE = true;
 
 	RenderWindow window(VideoMode(1440, 900), "Game Window");
 	while (window.isOpen()) {
@@ -292,7 +303,7 @@ int main()
 			}
 		}
 		if (Playing and scorepersecond.getElapsedTime().asSeconds() > .5) {
-			score += sps;
+			score += (sps * scoremultiplier);
 			scorepersecond.restart();
 		}
 		if (Playing and increasesps.getElapsedTime().asSeconds() > 120) {
@@ -325,6 +336,7 @@ int main()
 			window.draw(moneytext);
 			window.draw(repairbuttonSprite);
 			window.draw(attackbuttonSprite);
+			window.draw(multiplierSprite);
 			window.draw(border);
 			window.display();
 		}
@@ -456,7 +468,7 @@ int main()
 					killBullet = true;
 					if (rangerVector[i].rangerHP <= 0) {
 						rangerVector.erase(rangerVector.begin() + i);
-						score += scoreperranger;
+						score += (scoreperranger * scoremultiplier);
 						money += moneyperranger;
 					}
 				}
@@ -535,6 +547,29 @@ int main()
 		}
 		if (money < 0) {
 			money = 0;
+		}
+		if (Playing and event.type == Event::MouseButtonPressed) {
+			if (attackbuttonSprite.getGlobalBounds().contains((Vector2f)Mouse::getPosition(window)) and waittime.getElapsedTime().asSeconds() > .25) {
+				if (money >= 500) {
+					money -= 500;
+					playerDamage *= 1.15;
+					waittime.restart();
+				}
+			}
+			if (repairbuttonSprite.getGlobalBounds().contains((Vector2f)Mouse::getPosition(window)) and waittime2.getElapsedTime().asSeconds() > .25) {
+				if (money >= 500) {
+					money -= 500;
+					towerHealth += 1000;
+					waittime2.restart();
+				}
+			}
+			if (multiplierSprite.getGlobalBounds().contains((Vector2f)Mouse::getPosition(window)) and waittime2.getElapsedTime().asSeconds() > .25) {
+				if (money >= 1000) {
+					money -= 1000;
+					scoremultiplier += 1;
+					waittime3.restart();
+				}
+			}
 		}
 	}
 }
