@@ -22,9 +22,9 @@ public:
 	Clock pounderSpeed;
 	int pounderHP;
 	Clock shotClock;
-	Clock skinClock
+	Clock skinClock;
 	void movePounder();
 	int skin;
-	void gotHitRip(int);
+	void gotYotRip(int);
 };
 
