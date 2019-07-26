@@ -29,6 +29,9 @@ public:
 	void moveRanger();
 	bool skin;
 	void gotHitRip(int);
-	
+	int rangertexture;
+	void Explodey();
+	Texture* rangerExplosion;
+	Clock rangerExplodeClock;
 };
 

@@ -560,12 +560,11 @@ int main()
 						rangerVector[i].gotHitRip(playerDamage);
 						bulletToKill = j;
 						killBullet = true;
-						if (rangerVector[i].rangerHP <= 0) {
-							rangerVector.erase(rangerVector.begin() + i);
-							score += (scoreperranger * scoremultiplier);
-							money += moneyperranger;
+						if (rangerVector[i].rangertexture == 1 and rangerVector[i].rangerHP <= 0) {
+							rangerVector[i].Explodey();
+							rangerVector[i].rangerExplodeClock.restart();
 						}
-					}
+					}	
 				}
 				for (int r = 0; r < pounderVector.size(); r++) {
 					if (pounderVector[r].pounder.getGlobalBounds().contains(projectileVector[j].bullet.getPosition())) {
@@ -576,12 +575,21 @@ int main()
 							pounderVector[r].Explode();
 							pounderVector[r].pounderExplodeClock.restart();
 						}
-						if (pounderVector[r].poundertexture == 2 and pounderVector[r].pounderExplodeClock.getElapsedTime().asSeconds() > .15) {
-							pounderVector.erase(pounderVector.begin() + r);
-							score += (pounderPoints * scoremultiplier);
-							money += pounderCoins;
-						}
 					}
+				}
+			}
+			for (int r = 0; r < pounderVector.size(); r++) {
+				if (pounderVector[r].poundertexture == 2 and pounderVector[r].pounderExplodeClock.getElapsedTime().asSeconds() > .1) {
+					pounderVector.erase(pounderVector.begin() + r);
+					score += (pounderPoints * scoremultiplier);
+					money += pounderCoins;
+				}
+			}
+			for (int i = 0; i < rangerVector.size(); i++) {
+				if (rangerVector[i].rangertexture == 2 and rangerVector[i].rangerHP <= 0 and rangerVector[i].rangerExplodeClock.getElapsedTime().asSeconds() > .1) {
+					rangerVector.erase(rangerVector.begin() + i);
+					score += (scoreperranger * scoremultiplier);
+					money += moneyperranger;
 				}
 			}
 
