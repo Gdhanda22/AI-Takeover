@@ -19,20 +19,22 @@ Boss::Boss(int bossHealth, Vector2f pos)
 	boss6->loadFromFile("boss6.png");
 	boss7 = new Texture();
 	boss7->loadFromFile("boss7.png");
+	bossExplode = new Texture();
+	bossExplode->loadFromFile("explosion.png");
 	skin = 1;
 	boss.setTexture(*boss1);
 	health = bossHealth;
 	boss.setOrigin(26, 35);
 	boss.setPosition(pos);
 	boss.setScale(4, 4);
-
+	bosstexture = 1;
 
 
 }
 
 void Boss::moveBoss()
 {
-	if (boss.getPosition().y < 450) {
+	if (boss.getPosition().y < 450 and bosstexture == 1) {
 
 		if (bossSpeed.getElapsedTime().asSeconds() >= .05) {
 			boss.move(0, .65);
@@ -131,4 +133,11 @@ void Boss::moveBoss()
 
 void Boss::getBoppedRip(int damage) {
 	health -= damage;
+}
+
+void Boss::ExplodeBoss() {
+	boss.setTexture(*bossExplode);
+	boss.setScale(7, 7);
+	boss.setOrigin(16.5, 16.5);
+	bosstexture = 2;
 }

@@ -32,6 +32,11 @@ public:
 	int skin;
 	Clock skinClock;
 	void getBoppedRip(int);
+	void ExplodeBoss();
+	int bosstexture;
+	Texture* bossExplode;
+	Clock bossExplodeClock;
+	Clock shootboiswithlaser;
 
 };
 

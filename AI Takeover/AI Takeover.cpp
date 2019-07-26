@@ -160,7 +160,7 @@ int main()
 	health.setString(to_string(towerHealth));
 
 	//Money Stuff
-	int money = 250;
+	int money = 500;
 	Text moneytext;
 	moneytext.setFont(font);
 	moneytext.setFillColor(Color(80, 80, 80));
@@ -191,7 +191,7 @@ int main()
 	vector<Pounder> pounderVector;
 	Clock pounderspawn;
 	Clock pounderspawnTime;
-	int pounderHealth = 2500;
+	int pounderHealth = 2000;
 	int pounderTime = 25;
 	double decreasePounderDecrease = 0;
 	int pounderDamage = 200;
@@ -256,18 +256,26 @@ int main()
 	bool ALIVE = true;
 
 
-
 	// THE BOSS BOI STUFF
-	int bossCoins = 500;
+	int bossCoins = 0;
 	int bossHealth = 5000;
-	int bossPoints = 1000;
-	int bossDamage = 1;
+	int bossPoints = 4000;
+	int bossDamage = 0;
 	Clock bossSpawn;
 	vector<Boss> bossVector;
 
-
-
-
+	// Boss laser sprite
+	Sprite bossLaser;
+	Texture laser1;
+	laser1.loadFromFile("laser1.png");
+	Texture laser2;
+	laser2.loadFromFile("laser2.png");
+	bossLaser.setTexture(laser1);
+	bossLaser.setPosition(684, 383);
+	bossLaser.setOrigin(18, 0);
+	bossLaser.setScale(4, 4);
+	Clock laserClock;
+	bool laserskin = true;
 
 
 	RenderWindow window(VideoMode(1440, 900), "Game Window");
@@ -292,19 +300,22 @@ int main()
 						if (start.getGlobalBounds().contains((Vector2f)Mouse::getPosition(window))) {
 							scorepersecond.restart();
 							Playing = true;
-							switch (skin) {
-							case 1:
-								player.setPosition(720, 826);
-							case 2:
-								player.setPosition(720, 821);
-							case 3:
-								player.setPosition(720, 826);
-							}
 						}
 					}
 					if (event.type == Event::Closed) {
 						window.close();
 					}
+				}
+				switch (skin) {
+				case 1:
+					player.setPosition(player.getPosition().x, 826);
+					break;
+				case 2:
+					player.setPosition(player.getPosition().x, 816);
+					break;
+				case 3:
+					player.setPosition(player.getPosition().x, 826);
+					break;
 				}
 				if (event.type == Event::KeyPressed) {
 					if (event.key.code == Keyboard::D) {
@@ -332,7 +343,6 @@ int main()
 							break;
 						case 2:
 							player.setTexture(fullarrow);
-							player.setPosition(player.getPosition().x, (player.getPosition().y - 10));
 							break;
 						case 3:
 							player.setTexture(throwerDel);
@@ -372,17 +382,27 @@ int main()
 
 				window.clear();
 				window.draw(background);
-				for (PlayerBullet p : projectileVector) {
-					window.draw(p.bullet);
-				}
+				
 				for (Pounder p : pounderVector) {
 					window.draw(p.pounder);
 				}
-				for (RangerBullet p : rangerbulletVector) {
-					window.draw(p.cannonball);
-				}
 				for (Ranger p : rangerVector) {
 					window.draw(p.ranger);
+				}
+				for (int i = 0; i < bossVector.size(); i++) {
+					if (bossVector[i].health > 0 and bossVector[i].boss.getPosition().y >= 450) {
+						window.draw(bossLaser);
+						if (bossVector[i].shootboiswithlaser.getElapsedTime().asSeconds() > .05) {
+							towerHealth -= bossDamage;
+							bossVector[i].shootboiswithlaser.restart();
+						}
+					}
+				}
+				for (PlayerBullet p : projectileVector) {
+					window.draw(p.bullet);
+				}
+				for (RangerBullet p : rangerbulletVector) {
+					window.draw(p.cannonball);
 				}
 				for (Boss p : bossVector) {
 					window.draw(p.boss);
@@ -577,6 +597,17 @@ int main()
 						}
 					}
 				}
+				for (int t = 0; t < bossVector.size(); t++) {
+					if (bossVector[t].boss.getGlobalBounds().contains(projectileVector[j].bullet.getPosition()) and (projectileVector[j].bullet.getPosition().y < bossVector[t].boss.getPosition().y)) {
+						bossVector[t].getBoppedRip(playerDamage);
+						bulletToKill = j;
+						killBullet = true;
+						if (bossVector[t].bosstexture == 1 and bossVector[t].health <= 0) {
+							bossVector[t].ExplodeBoss();
+							bossVector[t].bossExplodeClock.restart();
+						}
+					}
+				}
 			}
 			for (int r = 0; r < pounderVector.size(); r++) {
 				if (pounderVector[r].poundertexture == 2 and pounderVector[r].pounderExplodeClock.getElapsedTime().asSeconds() > .1) {
@@ -590,6 +621,13 @@ int main()
 					rangerVector.erase(rangerVector.begin() + i);
 					score += (scoreperranger * scoremultiplier);
 					money += moneyperranger;
+				}
+			}
+			for (int t = 0; t < bossVector.size(); t++) {
+				if (bossVector[t].bosstexture == 2 and bossVector[t].health <= 0 and bossVector[t].bossExplodeClock.getElapsedTime().asSeconds() > .1) {
+					bossVector.erase(bossVector.begin() + t);
+					score += (bossPoints * scoremultiplier);
+					money += bossCoins;
 				}
 			}
 
@@ -619,6 +657,10 @@ int main()
 					Boss boss(bossHealth, Vector2f(720, -20));
 					bossVector.push_back(boss);
 					bossSpawn.restart();
+					bossCoins += 500;
+					bossPoints += 1000;
+					bossDamage++;
+					bossHealth += 2500;
 				}
 			}
 			if (decreasetime.getElapsedTime().asSeconds() >= 60 - decreasethedecrease and rangertime > .5) {
@@ -748,6 +790,20 @@ int main()
 			}
 			for (Boss &p : bossVector) {
 				p.moveBoss();
+			}
+			if (laserClock.getElapsedTime().asSeconds() > .1 and laserskin == true) {
+					laserskin = false;
+					laserClock.restart();
+				}
+			if (laserClock.getElapsedTime().asSeconds() > .1 and laserskin == false) {
+					laserskin = true;
+					laserClock.restart();
+				}
+			if (laserskin == true) {
+				bossLaser.setTexture(laser1);
+			}
+			if (laserskin == false) {
+				bossLaser.setTexture(laser2);
 			}
 		}
 	}
