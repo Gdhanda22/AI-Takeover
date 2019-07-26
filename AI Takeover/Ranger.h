@@ -20,6 +20,7 @@ public:
 	Ranger(Vector2f, int);
 	Texture* rangerSkin;
 	Texture* rangerSkin2;
+	Texture* exploSion;
 	Sprite ranger;
 	Clock rangerSpeed;
 	int rangerHP;

@@ -22,7 +22,10 @@ Pounder::Pounder(Vector2f pos, int health)
 	punch1->loadFromFile("punch1.png");
 	punch2 = new Texture();
 	punch2->loadFromFile("punch2.png");
+	pounderExplosion = new Texture(); 
+	pounderExplosion->loadFromFile("explosion.png");
 
+	poundertexture = 1;
 	pounder.setTexture(*pounderSkin);
 	pounder.setPosition(pos);
 	pounder.setOrigin(32.5, 47.5);
@@ -37,7 +40,7 @@ Pounder::Pounder(Vector2f pos, int health)
 
 void Pounder::movePounder()
 {
-	if (pounder.getPosition().y < 716) {
+	if (pounder.getPosition().y < 716 and poundertexture == 1) {
 
 		if (pounderSpeed.getElapsedTime().asSeconds() >= .05) {
 			pounder.setPosition(pounder.getPosition().x, pounder.getPosition().y + 1.4);
@@ -95,7 +98,7 @@ void Pounder::movePounder()
 			break;
 		}
 	}
-	else {
+	else if (pounder.getPosition().y >= 716 and poundertexture == 1) {
 
 		if (skinClock.getElapsedTime().asSeconds() >= .2 and punchSkin == 1) {
 			punchSkin = 2;
@@ -139,4 +142,11 @@ void Pounder::gotYotRip(int damage)
 {
 	pounderHP -= damage;
 
+}
+
+void Pounder::Explode() {
+	pounder.setTexture(*pounderExplosion);
+	pounder.setScale(5, 5);
+	pounder.setOrigin(16.5, 16.5);
+	poundertexture = 2;
 }

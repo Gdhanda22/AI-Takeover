@@ -49,8 +49,8 @@ int main()
 	HighScoreText.setFillColor(Color::Black);
 	HighScoreText.setScale(2, 2);
 	YourScore.setScale(2, 2);
-	HighScoreText.setPosition(350, 525);
-	YourScore.setPosition(350, 600);
+	HighScoreText.setPosition(350, 555);
+	YourScore.setPosition(350, 645);
 	
 
 
@@ -219,10 +219,10 @@ int main()
 	gameovertext.setTexture(gameovertext2);
 	gameovertext.setPosition(720, 250);
 	gameovertext.setOrigin(37, 5);
-	gameovertext.setScale(12, 12);
+	gameovertext.setScale(13, 13);
 	Sprite tint;
 	Texture tintTexture;
-	tintTexture.loadFromFile("tinteez.png");
+	tintTexture.loadFromFile("tint.png");
 	tint.setTexture(tintTexture);
 	tint.setOrigin(16, 16);
 	tint.setPosition(720, 450);
@@ -349,12 +349,13 @@ int main()
 				}
 			}
 			if (ALIVE == false) {
-				HighScoreFile.open(filename, ios::out);
+				HighScoreFile.open("HighScoreFile.txt", ios::in);
 				HighScoreFile >> HighScore;
-				cout << HighScore;
 					if (score > HighScore) {
 						HighScore = score;
 					}
+					HighScoreFile.close();
+					HighScoreFile.open("HighScoreFile.txt", ios::out);
 				HighScoreFile << HighScore;
 				HighScoreFile.close();
 			}
@@ -410,8 +411,8 @@ int main()
 				window.display();
 			}
 			else if (ALIVE == false) {
-				YourScore.setString("Your Score: " + to_string(score));
-				HighScoreText.setString("Highscore: " + to_string(HighScore));
+				YourScore.setString("Your Score  " + to_string(score));
+				HighScoreText.setString("High Score  " + to_string(HighScore));
 				window.clear();
 				window.draw(background);
 				for (PlayerBullet p : projectileVector) {
@@ -571,7 +572,11 @@ int main()
 						pounderVector[r].gotYotRip(playerDamage);
 						bulletToKill = j;
 						killBullet = true;
-						if (pounderVector[r].pounderHP <= 0) {
+						if (pounderVector[r].poundertexture == 1 and pounderVector[r].pounderHP <= 0) {
+							pounderVector[r].Explode();
+							pounderVector[r].pounderExplodeClock.restart();
+						}
+						if (pounderVector[r].poundertexture == 2 and pounderVector[r].pounderExplodeClock.getElapsedTime().asSeconds() > .15) {
 							pounderVector.erase(pounderVector.begin() + r);
 							score += (pounderPoints * scoremultiplier);
 							money += pounderCoins;

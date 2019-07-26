@@ -39,6 +39,10 @@ public:
 	int atLocation;
 	Clock doDamage;
 	Clock firstDamage;
-	void die();
+	void Explode();
+	Clock pounderExplodeClock;
+	Texture* pounderExplosion;
+	int poundertexture;
+
 };
 
