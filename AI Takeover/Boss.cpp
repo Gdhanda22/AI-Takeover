@@ -32,57 +32,57 @@ Boss::Boss(int bossHealth, Vector2f pos)
 
 void Boss::moveBoss()
 {
-	if (boss.getPosition().y < 550) {
+	if (boss.getPosition().y < 450) {
 
 		if (bossSpeed.getElapsedTime().asSeconds() >= .05) {
 			boss.move(0, .65);
 			bossSpeed.restart();
 		}
-		if (skinClock.getElapsedTime().asSeconds() >= .12 and skin == 1) {
+		if (skinClock.getElapsedTime().asSeconds() >= .2 and skin == 1) {
 			skin = 2;
 			skinClock.restart();
 		}
-		else if (skinClock.getElapsedTime().asSeconds() >= .12 and skin == 2) {
+		else if (skinClock.getElapsedTime().asSeconds() >= .2 and skin == 2) {
 			skin = 3;
 			skinClock.restart();
 		}
-		else if (skinClock.getElapsedTime().asSeconds() >= .12 and skin == 3) {
+		else if (skinClock.getElapsedTime().asSeconds() >= .2 and skin == 3) {
 			skin = 4;
 			skinClock.restart();
 		}
-		else if (skinClock.getElapsedTime().asSeconds() >= .12 and skin == 4) {
+		else if (skinClock.getElapsedTime().asSeconds() >= .2 and skin == 4) {
 			skin = 5;
 			skinClock.restart();
 		}
-		else if (skinClock.getElapsedTime().asSeconds() >= .12 and skin == 5) {
+		else if (skinClock.getElapsedTime().asSeconds() >= .2 and skin == 5) {
 			skin = 6;
 			skinClock.restart();
 		}
-		else if (skinClock.getElapsedTime().asSeconds() >= .12 and skin == 6) {
+		else if (skinClock.getElapsedTime().asSeconds() >= .2 and skin == 6) {
 			skin = 7;
 			skinClock.restart();
 		}
-		else if (skinClock.getElapsedTime().asSeconds() >= .12 and skin == 7) {
+		else if (skinClock.getElapsedTime().asSeconds() >= .2 and skin == 7) {
 			skin = 8;
 			skinClock.restart();
 		}
-		else if (skinClock.getElapsedTime().asSeconds() >= .12 and skin == 8) {
+		else if (skinClock.getElapsedTime().asSeconds() >= .2 and skin == 8) {
 			skin = 9;
 			skinClock.restart();
 		}
-		else if (skinClock.getElapsedTime().asSeconds() >= .12 and skin == 9) {
+		else if (skinClock.getElapsedTime().asSeconds() >= .2 and skin == 9) {
 			skin = 10;
 			skinClock.restart();
 		}
-		else if (skinClock.getElapsedTime().asSeconds() >= .12 and skin == 10) {
+		else if (skinClock.getElapsedTime().asSeconds() >= .2 and skin == 10) {
 			skin = 11;
 			skinClock.restart();
 		}
-		else if (skinClock.getElapsedTime().asSeconds() >= .12 and skin == 11) {
+		else if (skinClock.getElapsedTime().asSeconds() >= .2 and skin == 11) {
 			skin = 12;
 			skinClock.restart();
 		}
-		else if (skinClock.getElapsedTime().asSeconds() >= .12 and skin == 12) {
+		else if (skinClock.getElapsedTime().asSeconds() >= .2 and skin == 12) {
 			skin = 1;
 			skinClock.restart();
 		}
@@ -127,4 +127,8 @@ void Boss::moveBoss()
 		
 		}
 	}
+}
+
+void Boss::getBoppedRip(int damage) {
+	health -= damage;
 }

@@ -31,6 +31,7 @@ public:
 	Clock bossSpeed;
 	int skin;
 	Clock skinClock;
+	void getBoppedRip(int);
 
 };
 
