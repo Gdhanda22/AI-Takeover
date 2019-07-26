@@ -49,8 +49,8 @@ int main()
 	HighScoreText.setFillColor(Color::Black);
 	HighScoreText.setScale(2, 2);
 	YourScore.setScale(2, 2);
-	HighScoreText.setPosition(350, 555);
-	YourScore.setPosition(350, 645);
+	HighScoreText.setPosition(350, 645);
+	YourScore.setPosition(350, 555);
 	
 
 
@@ -84,7 +84,6 @@ int main()
 	fakeDel.setOrigin(50, 50);
 	fakeDel.setPosition(529, 669);
 	fakeDel.setScale(1.95, 1.95);
-
 	int skin = 1;
 
 
@@ -139,7 +138,6 @@ int main()
 	// Score Stuff
 	int score = 0;
 	Text scoretext;
-	
 	scoretext.setFont(font);
 	scoretext.setScale(1.3, 1.3);
 	scoretext.setPosition(530, 26);
@@ -148,8 +146,6 @@ int main()
 	Clock increasesps;
 	int sps = 5;
 	int scoreperranger = 50;
-
-
 
 	// Tower Health Stuff
 	Sprite heart;
@@ -227,6 +223,7 @@ int main()
 	tint.setOrigin(16, 16);
 	tint.setPosition(720, 450);
 	tint.setScale(50, 50);
+	Clock gameOverMove;
 
 
 
@@ -411,6 +408,12 @@ int main()
 				window.display();
 			}
 			else if (ALIVE == false) {
+				if (player.getPosition().x > 720) {
+					player.move(-.1, 0);
+				}
+				else if (player.getPosition().x < 720) {
+					player.move(.1, 0);
+				}
 				YourScore.setString("Your Score  " + to_string(score));
 				HighScoreText.setString("High Score  " + to_string(HighScore));
 				window.clear();
@@ -616,14 +619,14 @@ int main()
 				decreasetime.restart();
 			}
 			if (rangerHealthBoost.getElapsedTime().asSeconds() >= 60) {
-				rangerHealth += 100;
-				rangerDamage += 10;
+				rangerHealth += 150;
+				rangerDamage *= 1.15;
 				moneyperranger += 25;
 				scoreperranger += 50;
 				pounderHealth += 500;
-				pounderDamage += 50;
+				pounderDamage *= 1.15;
 				pounderPoints += 350;
-				pounderCoins += 100;
+				pounderCoins += 50;
 				rangerHealthBoost.restart();
 			}
 			if (pounderspawnTime.getElapsedTime().asSeconds() >= 60 - decreasethedecrease and pounderTime > 5) {
@@ -680,21 +683,21 @@ int main()
 				money = 0;
 			}
 			if (Playing and event.type == Event::MouseButtonPressed and ALIVE) {
-				if (attackbuttonSprite.getGlobalBounds().contains((Vector2f)Mouse::getPosition(window)) and waittime.getElapsedTime().asSeconds() > .25) {
+				if (attackbuttonSprite.getGlobalBounds().contains((Vector2f)Mouse::getPosition(window)) and waittime.getElapsedTime().asSeconds() > .15) {
 					if (money >= 500) {
 						money -= 500;
-						playerDamage *= 1.1;
+						playerDamage *= 1.075;
 						waittime.restart();
 					}
 				}
-				if (repairbuttonSprite.getGlobalBounds().contains((Vector2f)Mouse::getPosition(window)) and waittime2.getElapsedTime().asSeconds() > .25) {
+				if (repairbuttonSprite.getGlobalBounds().contains((Vector2f)Mouse::getPosition(window)) and waittime2.getElapsedTime().asSeconds() > .15) {
 					if (money >= 500) {
 						money -= 500;
 						towerHealth += 1000;
 						waittime2.restart();
 					}
 				}
-				if (multiplierSprite.getGlobalBounds().contains((Vector2f)Mouse::getPosition(window)) and waittime3.getElapsedTime().asSeconds() > .25) {
+				if (multiplierSprite.getGlobalBounds().contains((Vector2f)Mouse::getPosition(window)) and waittime3.getElapsedTime().asSeconds() > .15) {
 					if (money >= 1000) {
 						money -= 1000;
 						scoremultiplier += 1;
