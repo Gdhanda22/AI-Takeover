@@ -418,14 +418,8 @@ int main()
 				for (PlayerBullet p : projectileVector) {
 					window.draw(p.bullet);
 				}
-				for (Pounder p : pounderVector) {
-					window.draw(p.pounder);
-				}
 				for (RangerBullet p : rangerbulletVector) {
 					window.draw(p.cannonball);
-				}
-				for (Ranger p : rangerVector) {
-					window.draw(p.ranger);
 				}
 				window.draw(player);
 				window.draw(top);
