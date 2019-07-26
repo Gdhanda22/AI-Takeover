@@ -6,6 +6,7 @@
 #include "Ranger.h"
 #include "RangerBullet.h"
 #include "PlayerBullet.h"
+#include "Boss.h"
 #include <iostream>
 #include <string>
 #include <random>
@@ -33,8 +34,6 @@ int main()
 	shootingskinstuff = 1;
 	double playerDamage = 50;
 
-
-
 	//High Score
 	Font font;
 	font.loadFromFile("foont.ttf");
@@ -51,8 +50,6 @@ int main()
 	YourScore.setScale(2, 2);
 	HighScoreText.setPosition(350, 645);
 	YourScore.setPosition(350, 555);
-	
-
 
 	// Skin Selection 
 	Sprite fakeNiv;
@@ -85,7 +82,6 @@ int main()
 	fakeDel.setPosition(529, 669);
 	fakeDel.setScale(1.95, 1.95);
 	int skin = 1;
-
 
 	// The Background
 	Sprite background;
@@ -180,7 +176,6 @@ int main()
 	dollar.setScale(1.4, 1.4);
 	dollar.setPosition(335, 48.5);
 
-
 	// Shooting Stuff
 	Clock clock;
 	Clock clock2;
@@ -191,7 +186,6 @@ int main()
 	int bulletToKill;
 	bool killBullet = false;
 	int rangerDamage = 40;
-
 
 	//Pounder Stuff
 	vector<Pounder> pounderVector;
@@ -204,9 +198,6 @@ int main()
 	int pounderCoins = 100;
 	int pounderPoints = 350;
 	bool hitTower = false;
-
-
-
 
 	//Game Over
 	Sprite gameovertext;
@@ -224,9 +215,6 @@ int main()
 	tint.setPosition(720, 450);
 	tint.setScale(50, 50);
 	Clock gameOverMove;
-
-
-
 
 	// Upgrade Buttons
 	Sprite repairbuttonSprite;
@@ -252,9 +240,6 @@ int main()
 	Clock waittime3;
 	int scoremultiplier = 1;
 
-
-
-
 	// Movement and other stuuf
 	bool PlayerLeft = false;
 	bool PlayerRight = false;
@@ -269,6 +254,21 @@ int main()
 	double rangertime = 4;
 	int arrow = 3;
 	bool ALIVE = true;
+
+
+
+	// THE BOSS BOI STUFF
+	int bossCoins = 500;
+	int bossHealth = 5000;
+	int bossPoints = 1000;
+	int bossDamage = 1;
+	Clock bossSpawn;
+	vector<Boss> bossVector;
+
+
+
+
+
 
 	RenderWindow window(VideoMode(1440, 900), "Game Window");
 	while (window.isOpen()) {
@@ -383,6 +383,9 @@ int main()
 				}
 				for (Ranger p : rangerVector) {
 					window.draw(p.ranger);
+				}
+				for (Boss p : bossVector) {
+					window.draw(p.boss);
 				}
 				window.draw(player);
 				window.draw(top);
@@ -612,6 +615,11 @@ int main()
 					pounderVector.push_back(pounder);
 					pounderspawn.restart();
 				}
+				if (bossSpawn.getElapsedTime().asSeconds() >= 180) {
+					Boss boss(bossHealth, Vector2f(720, -20));
+					bossVector.push_back(boss);
+					bossSpawn.restart();
+				}
 			}
 			if (decreasetime.getElapsedTime().asSeconds() >= 60 - decreasethedecrease and rangertime > .5) {
 				decreasethedecrease += .5;
@@ -737,6 +745,9 @@ int main()
 			if (towerHealth <= 0) {
 				ALIVE = false;
 				towerHealth = 0;
+			}
+			for (Boss &p : bossVector) {
+				p.moveBoss();
 			}
 		}
 	}

@@ -2,14 +2,9 @@
 #include "Boss.h"
 
 
-Boss::Boss(int bossHealth)
+Boss::Boss(int bossHealth, Vector2f pos)
 {
-	health = bossHealth
-	boss.setTexture(*boss1);
-	boss.setPosition(720, -15);
-	boss.setOrigin(26, 35);
-	pounder.setScale(4, 4);
-
+	
 	boss1 = new Texture();
 	boss1->loadFromFile("boss1.png");
 	boss2 = new Texture();
@@ -24,6 +19,14 @@ Boss::Boss(int bossHealth)
 	boss6->loadFromFile("boss6.png");
 	boss7 = new Texture();
 	boss7->loadFromFile("boss7.png");
+	skin = 1;
+	boss.setTexture(*boss1);
+	health = bossHealth;
+	boss.setOrigin(26, 35);
+	boss.setPosition(pos);
+	boss.setScale(4, 4);
+
+
 
 }
 
@@ -32,10 +35,10 @@ void Boss::moveBoss()
 	if (boss.getPosition().y < 550) {
 
 		if (bossSpeed.getElapsedTime().asSeconds() >= .05) {
-			boss.move(0, -1);
+			boss.move(0, .65);
 			bossSpeed.restart();
 		}
-		if (skinClock.getElapsedTime().asSeconds() >= .3 and skin == 1) {
+		if (skinClock.getElapsedTime().asSeconds() >= .12 and skin == 1) {
 			skin = 2;
 			skinClock.restart();
 		}
@@ -101,7 +104,7 @@ void Boss::moveBoss()
 			boss.setTexture(*boss5);
 			break;
 		case 6:
-			boss.setTexture(*boss6;
+			boss.setTexture(*boss6);
 			break;
 		case 7:
 			boss.setTexture(*boss7);

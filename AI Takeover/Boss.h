@@ -17,9 +17,9 @@ using namespace sf;
 class Boss
 {
 public:
-	Boss(int);
+	Boss(int, Vector2f);
 	int health;
-	sprite boss;
+	Sprite boss;
 	Texture* boss1;
 	Texture* boss2;
 	Texture* boss3;
@@ -29,6 +29,8 @@ public:
 	Texture* boss7;
 	void moveBoss();
 	Clock bossSpeed;
+	int skin;
+	Clock skinClock;
 
 };
 
