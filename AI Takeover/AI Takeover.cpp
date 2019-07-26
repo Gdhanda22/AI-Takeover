@@ -31,13 +31,28 @@ int main()
 	player.setScale(1.85, 1.85);
 	int shootingskinstuff;
 	shootingskinstuff = 1;
-
 	double playerDamage = 50;
 
+
+
+	//High Score
+	Font font;
+	font.loadFromFile("foont.ttf");
 	fstream HighScoreFile;
-	string filename = "Highscore.txt";
-	HighScoreFile.open(filename, ios::in);
-	HighScoreFile << "2000";
+	string filename = "HighScoreFile.txt";
+	int HighScore;
+	Text YourScore;
+	Text HighScoreText;
+	YourScore.setFont(font);
+	HighScoreText.setFont(font);
+	YourScore.setFillColor(Color::Black);
+	HighScoreText.setFillColor(Color::Black);
+	HighScoreText.setScale(2, 2);
+	YourScore.setScale(2, 2);
+	HighScoreText.setPosition(350, 525);
+	YourScore.setPosition(350, 600);
+	
+
 
 	// Skin Selection 
 	Sprite fakeNiv;
@@ -124,8 +139,7 @@ int main()
 	// Score Stuff
 	int score = 0;
 	Text scoretext;
-	Font font;
-	font.loadFromFile("foont.ttf");
+	
 	scoretext.setFont(font);
 	scoretext.setScale(1.3, 1.3);
 	scoretext.setPosition(530, 26);
@@ -134,6 +148,8 @@ int main()
 	Clock increasesps;
 	int sps = 5;
 	int scoreperranger = 50;
+
+
 
 	// Tower Health Stuff
 	Sprite heart;
@@ -178,7 +194,6 @@ int main()
 	random_device rangerx;
 	int bulletToKill;
 	bool killBullet = false;
-
 	int rangerDamage = 40;
 
 
@@ -186,7 +201,7 @@ int main()
 	vector<Pounder> pounderVector;
 	Clock pounderspawn;
 	Clock pounderspawnTime;
-	int pounderHealth = 3000;
+	int pounderHealth = 2500;
 	int pounderTime = 25;
 	double decreasePounderDecrease = 0;
 	int pounderDamage = 200;
@@ -333,6 +348,16 @@ int main()
 					window.close();
 				}
 			}
+			if (ALIVE == false) {
+				HighScoreFile.open(filename, ios::out);
+				HighScoreFile >> HighScore;
+				cout << HighScore;
+					if (score > HighScore) {
+						HighScore = score;
+					}
+				HighScoreFile << HighScore;
+				HighScoreFile.close();
+			}
 			if (Playing and scorepersecond.getElapsedTime().asSeconds() > .5 and ALIVE) {
 				score += (sps * scoremultiplier);
 				scorepersecond.restart();
@@ -385,6 +410,8 @@ int main()
 				window.display();
 			}
 			else if (ALIVE == false) {
+				YourScore.setString("Your Score: " + to_string(score));
+				HighScoreText.setString("Highscore: " + to_string(HighScore));
 				window.clear();
 				window.draw(background);
 				for (PlayerBullet p : projectileVector) {
@@ -412,6 +439,8 @@ int main()
 				window.draw(border);
 				window.draw(tint);
 				window.draw(gameovertext);
+				window.draw(YourScore);
+				window.draw(HighScoreText);
 				window.display();
 			}
 
